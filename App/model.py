@@ -51,8 +51,14 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    #TODO: Inicializar las estructuras de datos
-    pass
+    catalog = {
+        "data":None
+    }
+    
+    catalog["data"]=mp.newMap(7000,
+                              maptype='CHAINING',
+                              loadfactor=0.7)
+    return catalog
 
 
 # Funciones para agregar informacion al modelo
