@@ -35,8 +35,11 @@ def new_controller():
     """
     Crea una instancia del modelo
     """
-    #TODO: Llamar la función del modelo que crea las estructuras de datos
-    pass
+    control = {
+        "model": None
+    }
+    control["model"] = model.new_data_structs()
+    return control
 
 
 # Funciones para la carga de datos
@@ -45,6 +48,7 @@ def load_data(control, filename):
     """
     Carga los datos del reto
     """
+    
     Data_struct = control["model"]
     Input_file = csv.DictReader(open(filename,encoding="utf-8"))
     for i in Input_file:
@@ -58,13 +62,9 @@ def load_data(control, filename):
                     c += x
                 except:
                     break
-            i["Código actividad económica"] = int(c)
+            i["Código actividad económica"] = c
             int(i["Código actividad económica"])
-        model.add_data_lst(Data_struct,i)
-    for lst in Data_struct["anio_lst"]:
-        for x in lst:
-            model.add_data_map(Data_struct,i)
-            
+        model.add_data(Data_struct,i)
     return Data_struct
 
 

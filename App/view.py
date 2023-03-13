@@ -44,8 +44,8 @@ def new_controller():
     """
         Se crea una instancia del controlador
     """
-    #TODO: Llamar la función del controlador donde se crean las estructuras de datos
-    pass
+    control = controller.new_controller()
+    return control
 
 
 def print_menu():
@@ -66,9 +66,50 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos 
-    file = None
-    controller.load_data(control,file)
+    nombre_archivo= tamanio_muestra()
+    
+    data = controller.load_data(control, nombre_archivo)
+    
+    return data
+
+
+
+def tamanio_muestra():
+    """
+        Permite seleccionar el tamaño de la muestra que el usuario desea
+
+    Args:
+        opcion: la opcion seleccionada por el usuario
+    """
+    print("Seleccione el porcentaje de la lista que desea usar\n")
+    print("1 0.5%")
+    print("2 5%")
+    print("3 10%")
+    print("4 20%")
+    print("5 30%")
+    print("6 50%")
+    print("7 80%")
+    print("8 100%")
+                
+    opcion=int(input("-> "))
+    
+    text = "Data/DIAN/"
+    if opcion == 1:
+       return text + "Salida_agregados_renta_juridicos_AG-small.csv"
+    elif opcion == 2:
+        return text + "Salida_agregados_renta_juridicos_AG-5pct.csv"
+    elif opcion == 3:
+        return text + "Salida_agregados_renta_juridicos_AG-10pct.csv"
+    elif opcion == 4:
+        return text + "Salida_agregados_renta_juridicos_AG-20pct.csv"
+    elif opcion == 5:
+        return text + "Salida_agregados_renta_juridicos_AG-30pct.csv"
+    elif opcion == 6:
+        return text + "Salida_agregados_renta_juridicos_AG-50pct.csv"
+    elif opcion == 7:
+        return text + "Salida_agregados_renta_juridicos_AG-80pct.csv"
+    elif opcion == 8:
+        return text + "Salida_agregados_renta_juridicos_AG-large.csv"
 
 
 def print_data(control, id):
