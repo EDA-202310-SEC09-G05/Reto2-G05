@@ -45,8 +45,27 @@ def load_data(control, filename):
     """
     Carga los datos del reto
     """
-    # TODO: Realizar la carga de datos
-    pass
+    Data_struct = control["model"]
+    Input_file = csv.DictReader(open(filename,encoding="utf-8"))
+    for i in Input_file:
+        try:
+            int(i["Código actividad económica"])
+        except:
+            c = ""
+            for x in i["Código actividad económica"]:
+                try:
+                    int(x)
+                    c += x
+                except:
+                    break
+            i["Código actividad económica"] = int(c)
+            int(i["Código actividad económica"])
+        model.add_data_lst(Data_struct,i)
+    for lst in Data_struct["anio_lst"]:
+        for x in lst:
+            model.add_data_map(Data_struct,i)
+            
+    return Data_struct
 
 
 # Funciones de ordenamiento

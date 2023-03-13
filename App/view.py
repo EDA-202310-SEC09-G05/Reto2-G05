@@ -66,8 +66,9 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
+    #TODO: Realizar la carga de datos 
+    file = None
+    controller.load_data(control,file)
 
 
 def print_data(control, id):
@@ -156,6 +157,7 @@ if __name__ == "__main__":
         inputs = input('Seleccione una opción para continuar\n')
         try:
             if int(inputs) == 1:
+                
                 print("Cargando información de los archivos ....\n")
                 data = load_data(control)
             elif int(inputs) == 2:

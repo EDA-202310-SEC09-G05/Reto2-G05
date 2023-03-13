@@ -51,19 +51,44 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    #TODO: Inicializar las estructuras de datos
-    pass
+    data_structs = {
+        "anio_lst":{},
+            "anio_map":{}
+    }
+    
+    
 
-
+def map(data_struct,key,size,prime):
+    prime = size
+    data_struct[key] = mp.newMap(size)
 # Funciones para agregar informacion al modelo
 
-def add_data(data_structs, data):
+def add_data_lst(data_structs, data):
     """
     Función para agregar nuevos elementos a la lista
     """
-    #TODO: Crear la función para agregar elementos a una lista
-    pass
+    if data["Año"] in data_structs["anio_lst"].keys():
+        lt.addLast(data_structs["anio_lst"][data["Año"]],data)
+    else:
+        data_structs["anio_lst"][data["Año"]] =lt.newList(datastructure="ARRAY_LIST",
+                                     cmpfunction=compare)
+        lt.addLast(data_structs["anio_lst"][data["Año"]],data)
+    return data_structs
 
+def add_data_map(data_structs,data):
+    """
+    Función para agregar nuevos elementos a la lista
+    """
+    key = None
+    load_factor = None
+    prime = None
+    if data["Año"] in data_structs["anio_map"].keys():
+        mp.put(data_structs["anio_map"][data["Año"]],key,data) #falta hallar la key
+    else:
+        data_structs["anio_map"][data["Año"]] = mp.newMap(lt.size(data_structs["anio_lst"][data["Año"]]),prime,"CHAINING",load_factor,compare) #falta hallar datos de: key,prime y load_factor
+        mp.put(data_structs["anio_map"][data["Año"]],key,data) #falta hallar la key, hallar la key y value mediante la funcion new_data
+    return data_structs
+    
 
 # Funciones para creacion de datos
 
@@ -163,8 +188,15 @@ def compare(data_1, data_2):
     """
     Función encargada de comparar dos datos
     """
-    #TODO: Crear función comparadora de la lista
-    pass
+    if data_1["Año"] < data_2["Año"]:
+        return True
+    elif data_1["Año"] == data_2["Año"]:
+        if data_1["Código actividad económica"] < data_2["Código actividad económica"]:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 # Funciones de ordenamiento
 
