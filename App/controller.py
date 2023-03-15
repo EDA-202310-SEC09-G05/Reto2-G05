@@ -51,6 +51,7 @@ def load_data(control, filename):
     
     Data_struct = control["model"]
     Input_file = csv.DictReader(open(filename,encoding="utf-8"))
+    
     for i in Input_file:
         try:
             int(i["Código actividad económica"])
@@ -65,7 +66,8 @@ def load_data(control, filename):
             i["Código actividad económica"] = c
             int(i["Código actividad económica"])
         model.add_data(Data_struct,i)
-    return Data_struct
+        Data_struct["size"]+=1
+    return Data_struct,Data_struct["size"]
 
 
 # Funciones de ordenamiento

@@ -51,10 +51,17 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
+    
     data_structs = {
-        "anio_lst":{},
-            "anio_map":{}
-    }
+            "data": None,
+            "size": 0,
+            "anios": {
+                
+            }
+            }
+    
+    data_structs ["data"] = lt.newList(datastructure= "ARRAY_LIST",cmpfunction= compare)
+    return data_structs
     
     
 
@@ -63,31 +70,37 @@ def map(data_struct,key,size,prime):
     data_struct[key] = mp.newMap(size)
 # Funciones para agregar informacion al modelo
 
-def add_data_lst(data_structs, data):
-    """
-    Función para agregar nuevos elementos a la lista
-    """
-    if data["Año"] in data_structs["anio_lst"].keys():
-        lt.addLast(data_structs["anio_lst"][data["Año"]],data)
-    else:
-        data_structs["anio_lst"][data["Año"]] =lt.newList(datastructure="ARRAY_LIST",
-                                     cmpfunction=compare)
-        lt.addLast(data_structs["anio_lst"][data["Año"]],data)
-    return data_structs
+def add_data(data_structs,data):
+    
 
-def add_data_map(data_structs,data):
-    """
-    Función para agregar nuevos elementos a la lista
-    """
-    key = None
-    load_factor = None
-    prime = None
-    if data["Año"] in data_structs["anio_map"].keys():
-        mp.put(data_structs["anio_map"][data["Año"]],key,data) #falta hallar la key
+    if data["Año"] in data_structs["anios"]: # se revisa si el año existe
+        map = data_structs["anios"][data["Año"]]
+        if mp.contains(map,data["Código sector económico"]):
+            entry = mp.get(map,data["Código sector económico"])
+            lista = me.getValue(entry)
+            lt.addLast(lista,data)
+        else:
+            mp.put(map,data["Código sector económico"],lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  None))
+            entry = mp.get(map,data["Código sector económico"])
+            lista = me.getValue(entry)
+            lt.addLast(lista,data)
     else:
-        data_structs["anio_map"][data["Año"]] = mp.newMap(lt.size(data_structs["anio_lst"][data["Año"]]),prime,"CHAINING",load_factor,compare) #falta hallar datos de: key,prime y load_factor
-        mp.put(data_structs["anio_map"][data["Año"]],key,data) #falta hallar la key, hallar la key y value mediante la funcion new_data
+
+        data_structs["anios"][data["Año"]] = mp.newMap(60,
+                                              maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None)
+        map = data_structs["anios"][data["Año"]]
+        mp.put(map,data["Código sector económico"],lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  None))
+        entry = mp.get(map,data["Código sector económico"])
+        lista = me.getValue(entry)
+        lt.addLast(lista,data)
     return data_structs
+        
+    
+    
     
 
 # Funciones para creacion de datos
@@ -221,3 +234,7 @@ def sort(data_structs):
     """
     #TODO: Crear función de ordenamiento
     pass
+
+def mostrar_carga_datos(data_structs):
+    for i in data_structs["anios"].keys():
+         
