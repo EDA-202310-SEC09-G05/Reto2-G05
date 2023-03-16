@@ -235,6 +235,3 @@ def sort(data_structs):
     #TODO: Crear función de ordenamiento
     pass
 
-def mostrar_carga_datos(data_structs):
-    for i in data_structs["anios"].keys():
-         
