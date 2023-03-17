@@ -202,9 +202,9 @@ if __name__ == "__main__":
 
                 print("Cargando información de los archivos ....\n")
                 data,tamaño = load_data(control)
-                print("FUNCIONA??????????")
+                
                 print(data)
-                print("SI FUNCIONAAAAAAAAAAAAAAA")
+                
                 print("el totoal de fila guardas",tamaño)
             elif int(inputs) == 2:
                 print_req_1(control)

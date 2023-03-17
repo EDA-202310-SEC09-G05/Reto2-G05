@@ -69,7 +69,6 @@ def load_data(control, filename):
         Data_struct["size"]+=1
     return Data_struct,Data_struct["size"]
 
-
 # Funciones de ordenamiento
 
 def sort(control):

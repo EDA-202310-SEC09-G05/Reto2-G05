@@ -53,21 +53,18 @@ def new_data_structs():
     """
     
     data_structs = {
-            "data": None,
             "size": 0,
             "anios": {
                 
             }
             }
     
-    data_structs ["data"] = lt.newList(datastructure= "ARRAY_LIST",cmpfunction= compare)
+    
     return data_structs
     
     
 
-def map(data_struct,key,size,prime):
-    prime = size
-    data_struct[key] = mp.newMap(size)
+
 # Funciones para agregar informacion al modelo
 
 def add_data(data_structs,data):
@@ -75,28 +72,78 @@ def add_data(data_structs,data):
 
     if data["Año"] in data_structs["anios"]: # se revisa si el año existe
         map = data_structs["anios"][data["Año"]]
-        if mp.contains(map,data["Código sector económico"]):
-            entry = mp.get(map,data["Código sector económico"])
-            lista = me.getValue(entry)
-            lt.addLast(lista,data)
+        
+        if mp.contains(map["sector"],data["Código sector económico"]):
+            lst = mp.get(map["sector"][data["Código sector económico"]],"elements")
+            lt.addLast(me.getValue(lst),data)
+            #falta hacer la suma
+            
         else:
-            mp.put(map,data["Código sector económico"],lt.newList(datastructure="ARRAY_LIST",cmpfunction=
-                                                                  None))
-            entry = mp.get(map,data["Código sector económico"])
-            lista = me.getValue(entry)
-            lt.addLast(lista,data)
+            entry = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=8,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+            mp.put(map["sector"],me.getKey(entry),me.getValue(entry))
+            lst = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  compare))
+            mp.put(map["sector"],me.getKey(lst),me.getValue(lst))
+            #falta hacer la parte de la suma
+            
+                        
+        if mp.contains(map["sub_sector"],data["Código subsector económico"]):
+            lst = mp.get(map["sub_sector"][data["Código subsector económico"]],"elements")
+            lt.addLast(me.getValue(lst),data)
+            #falta hacer la parte de la su
+        else:
+            entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+            mp.put(map["sub_sector"],me.getKey(entry),me.getValue(entry))
+        entry = mp.get(map,data["Código sector económico"])
+        lista = me.getValue(entry)
+        lt.addLast(lista,data)
     else:
 
-        data_structs["anios"][data["Año"]] = mp.newMap(60,
+        data_structs["anios"][data["Año"]] = mp.newMap(3,
                                               maptype = "PROBING",
                                               loadfactor= 0.5,
                                               cmpfunction=None)
         map = data_structs["anios"][data["Año"]]
-        mp.put(map,data["Código sector económico"],lt.newList(datastructure="ARRAY_LIST",cmpfunction=
-                                                                  None))
-        entry = mp.get(map,data["Código sector económico"])
-        lista = me.getValue(entry)
-        lt.addLast(lista,data)
+        element_entry = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  compare))
+        
+        mp.put(map,me.getKey(element_entry),me.getValue(element_entry))
+        
+        subsector_entry = me.newMapEntry("sub_sector",mp.newMap(21,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+        mp.put(map,me.getKey(subsector_entry),me.getValue(subsector_entry))
+        
+        sector_entry = me.newMapEntry("sector",mp.newMap(12,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+        mp.put(map,me.getKey(sector_entry),me.getValue(sector_entry))
+        lst = mp.get(map,"elements")
+        lt.addLast(lst,data)
+        
+        entry_sector = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=8,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+        mp.put(map["sector"],me.getKey(entry_sector),me.getValue(entry_sector))
+        lst_sector = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  compare))
+        mp.put(map["sector"],me.getKey(lst_sector),me.getValue(lst_sector))
+        #falta hacer la parte de la suma
+            
+                        
+        entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None))
+        mp.put(map["sub_sector"],me.getKey(entry_sub),me.getValue(entry_sub))
+        
+        lst_sector = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  compare))
+        mp.put(map["sub_sector"][data["Código subsector económico"]],me.getKey(lst_sector),me.getValue(lst_sector))
+        #falta hacer la parte de la suma
     return data_structs
         
     
