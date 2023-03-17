@@ -143,12 +143,12 @@ def print_req_3(control):
     pass
 
 
-def print_req_4(control):
+def print_req_4(control,anio):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    req_4 = controller.req_4(control,anio)
+    print(req_4)
 
 
 def print_req_5(control):
@@ -203,7 +203,8 @@ if __name__ == "__main__":
                 print("Cargando información de los archivos ....\n")
                 data = load_data(control)
                 
-                print(data)
+                print(data["anios"]["table"]["elements"][4]["value"]["table"]["elements"][0])
+                
                 
                 print("el totoal de fila guardas",data["size"])
             elif int(inputs) == 2:
@@ -216,7 +217,8 @@ if __name__ == "__main__":
                 print_req_3(control)
 
             elif int(inputs) == 5:
-                print_req_4(control)
+                anio = input("Ingrese el año del cual año desea conocer el subsector con mas gastos y costos nomina: ")
+                print_req_4(control,anio)
 
             elif int(inputs) == 6:
                 print_req_5(control)

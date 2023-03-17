@@ -68,11 +68,11 @@ def new_data_structs():
 
 def add_data(data_structs,data):
     
-
     if mp.contains(data_structs["anios"],data["Año"]): # se revisa si el año existe
         map =  me.getValue(mp.get(data_structs["anios"],data["Año"]))
         
         map_sectores = me.getValue(mp.get(map,"sector"))
+        
         if mp.contains(map_sectores,data["Código sector económico"]):
             map_sector_cod = me.getValue(mp.get(map_sectores,data["Código sector económico"]))
             lst = me.getValue(mp.get(map_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
@@ -106,6 +106,7 @@ def add_data(data_structs,data):
             
             #falta hacer la suma
             
+            
         else:
             entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
                                               loadfactor= 0.5,
@@ -124,6 +125,7 @@ def add_data(data_structs,data):
             lt.addLast(me.getValue(mp.get(map_sub_sector_cod,me.getKey(lst))),data) #añadimos a la lista este nuevo elemento
             
             #falta hacer la parte de la suma
+            
     else:
         
         new_map = me.newMapEntry(data["Año"],mp.newMap(3,
@@ -170,6 +172,7 @@ def add_data(data_structs,data):
         
         #falta hacer la parte de la suma
         
+        
         entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
                                               loadfactor= 0.5,
                                               cmpfunction=None)) # crea pareja llave valor entry_sub (codigo_sub_sector,map del sub_sector)
@@ -185,6 +188,23 @@ def add_data(data_structs,data):
         lt.addLast(me.getValue(mp.get(map_sector_cod,"elements")),data) # añadimos el elemento a la lista de su respectivo sub:sector
                 
         #falta hacer la parte de la suma
+        
+        
+        #pareja llave, valor de costos y gastos nomina
+        entry_cyg = me.newMapEntry("Costos y gastos nomina",0)
+        mp.put(map_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))
+        cyg = me.getValue(mp.get(map_sector_cod,me.getKey(entry_cyg)))
+        cyg += 1
+        mp.put(map_sector_cod,me.getKey(entry_cyg),cyg)
+        
+        #pareja llave valor retenciones  sub
+        entry_ret = me.newMapEntry("retenciones",0)
+        
+        #pareja llave valor ingresos netos sub_sector
+        
+        
+        map_sector_cod       
+        
     return data_structs
         
     
@@ -243,12 +263,41 @@ def req_3(data_structs):
     pass
 
 
-def req_4(data_structs):
+def req_4(data_structs,anio):
     """
     Función que soluciona el requerimiento 4
     """
-    # TODO: Realizar el requerimiento 4
-    pass
+    map_year = me.getValue(mp.get(data_structs["anios"],anio))
+    
+    map_sub_sector = me.getValue(mp.get(map_year,"sub_sector"))
+    mayor = 0
+    diccio = {}
+    for sub in lt.iterator(mp.keySet(map_sub_sector)):
+        map_por_sub = me.getValue(mp.get(map_sub_sector,sub))
+        c_y_g = me.getValue(mp.get(map_por_sub,"Costos y gastos nomina"))
+        if  c_y_g > mayor:
+            diccio["costos y gastos nomina"] = me.getValue(mp.get(map_por_sub,"Costos y gastos nomina"))
+            diccio["ingresos netos"] = me.getValue(mp.get(map_por_sub,"ingresos netos"))
+            diccio["costos y gastos"] = me.getValue(mp.get(map_por_sub,"costos y gastos"))
+            diccio["saldo a pagar"] = me.getValue(mp.get(map_por_sub,"saldo a pagar"))
+            diccio["saldo a favor"] = me.getValue( mp.get(map_por_sub,"saldo a favor"))
+            
+            actividad = lt.firstElement(me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,sub)),"elements")))
+            diccio["nombre sector"] =  actividad["Nombre sector economico"]
+            diccio["codigo sector"] =  actividad["Código sector economico"]
+            diccio["nombre subsector"] =  actividad["Nombre subsector economico"]
+            diccio["codigo subsector"] =  actividad["Código subsector economico"]
+                        
+            mayor = diccio["costos y gastos nomina"]
+    lst = me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"]))
+    merg.sort(lst,sort_req_4)
+    dic_act = {"mas": [],"menos":[]}
+    for i in range(1,4):
+        lt.addLast(dic_act["mas"], lt.getElement(lst,i))
+    for x in range(lt.size(lst)-2,lt.size(lst)):
+        lt.addLast(dic_act["menos"],lt.getElement(lst,x))
+        
+    return diccio,dic_act
 
 
 def req_5(data_structs):
@@ -301,7 +350,12 @@ def compare(data_1, data_2):
 
 # Funciones de ordenamiento
 
-
+def sort_req_4(data_1,data_2):
+    if data_1["Costos y gastos nómina"] > data_2["Costos y gastos nómina"]:
+        return True
+    else:
+        return False
+    
 def sort_criteria(data_1, data_2):
     """sortCriteria criterio de ordenamiento para las funciones de ordenamiento
 
