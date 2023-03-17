@@ -201,11 +201,11 @@ if __name__ == "__main__":
             if int(inputs) == 1:
 
                 print("Cargando información de los archivos ....\n")
-                data,tamaño = load_data(control)
+                data = load_data(control)
                 
                 print(data)
                 
-                print("el totoal de fila guardas",tamaño)
+                print("el totoal de fila guardas",data["size"])
             elif int(inputs) == 2:
                 print_req_1(control)
 

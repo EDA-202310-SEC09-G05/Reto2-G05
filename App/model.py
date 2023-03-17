@@ -54,12 +54,11 @@ def new_data_structs():
     
     data_structs = {
             "size": 0,
-            "anios": {
-                
+            "anios": None
             }
-            }
-    
-    
+    data_structs["anios"] = mp.newMap(numelements=11,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None)    
     return data_structs
     
     
@@ -70,44 +69,70 @@ def new_data_structs():
 def add_data(data_structs,data):
     
 
-    if data["Año"] in data_structs["anios"]: # se revisa si el año existe
-        map = data_structs["anios"][data["Año"]]
+    if mp.contains(data_structs["anios"],data["Año"]): # se revisa si el año existe
+        map =  me.getValue(mp.get(data_structs["anios"],data["Año"]))
         
-        if mp.contains(map["sector"],data["Código sector económico"]):
-            lst = mp.get(map["sector"][data["Código sector económico"]],"elements")
-            lt.addLast(me.getValue(lst),data)
+        map_sectores = me.getValue(mp.get(map,"sector"))
+        if mp.contains(map_sectores,data["Código sector económico"]):
+            map_sector_cod = me.getValue(mp.get(map_sectores,data["Código sector económico"]))
+            lst = me.getValue(mp.get(map_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
+            lt.addLast(lst,data) # añadimos el nuevo elemento a esta lista
+            
             #falta hacer la suma
             
         else:
             entry = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=8,maptype = "PROBING",
                                               loadfactor= 0.5,
-                                              cmpfunction=None))
-            mp.put(map["sector"],me.getKey(entry),me.getValue(entry))
+                                              cmpfunction=None)) # Creamos la pareja llave valor de (cod_sector,map_sector)
+            map_sectores = me.getValue(mp.get(map,"sector"))
+            mp.put(map_sectores,me.getKey(entry),me.getValue(entry))
+            
+            map_sector_cod = me.getValue(mp.get(map_sectores,data["Código sector económico"]))
             lst = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
                                                                   compare))
-            mp.put(map["sector"],me.getKey(lst),me.getValue(lst))
+            mp.put(map_sector_cod,me.getKey(lst),me.getValue(lst)) #ponemos la lista en el el el mapa de su respectivo sector
+            
+            lt.addLast(me.getValue(mp.get(map_sector_cod,me.getKey(lst))),data) #añadimos a la lista este nuevo elemento
+            
             #falta hacer la parte de la suma
             
-                        
-        if mp.contains(map["sub_sector"],data["Código subsector económico"]):
-            lst = mp.get(map["sub_sector"][data["Código subsector económico"]],"elements")
-            lt.addLast(me.getValue(lst),data)
-            #falta hacer la parte de la su
+                 
+        map_sub_sectores = me.getValue(mp.get(map,"sub_sector"))
+        
+        if mp.contains(map_sub_sectores,data["Código subsector económico"]):
+            map_sub_sector_cod = me.getValue(mp.get(map_sub_sectores,data["Código subsector económico"]))
+            lst = me.getValue(mp.get(map_sub_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
+            lt.addLast(lst,data) # añadimos el nuevo elemento a esta lista
+            
+            #falta hacer la suma
+            
         else:
             entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
                                               loadfactor= 0.5,
-                                              cmpfunction=None))
-            mp.put(map["sub_sector"],me.getKey(entry),me.getValue(entry))
-        entry = mp.get(map,data["Código sector económico"])
-        lista = me.getValue(entry)
-        lt.addLast(lista,data)
-    else:
+                                              cmpfunction=None)) # Creamos la pareja llave valor de (cod_sub_sector,map_sector)
+            map_sub_sectores = me.getValue(mp.get(map,"sub_sector"))
 
-        data_structs["anios"][data["Año"]] = mp.newMap(3,
+            mp.put(map_sub_sectores,me.getKey(entry),me.getValue(entry))
+
+            
+            map_sub_sector_cod = me.getValue(mp.get(map_sub_sectores,data["Código subsector económico"]))
+
+            lst = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  compare))
+            mp.put(map_sub_sector_cod,me.getKey(lst),me.getValue(lst)) #ponemos la lista en el el el mapa de su respectivo sector
+            
+            lt.addLast(me.getValue(mp.get(map_sub_sector_cod,me.getKey(lst))),data) #añadimos a la lista este nuevo elemento
+            
+            #falta hacer la parte de la suma
+    else:
+        
+        new_map = me.newMapEntry(data["Año"],mp.newMap(3,
                                               maptype = "PROBING",
                                               loadfactor= 0.5,
-                                              cmpfunction=None)
-        map = data_structs["anios"][data["Año"]]
+                                              cmpfunction=None))
+        mp.put(data_structs["anios"],me.getKey(new_map),me.getValue(new_map))
+        map = me.getValue(mp.get(data_structs["anios"],data["Año"]))
+                
         element_entry = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
                                                                   compare))
         
@@ -122,27 +147,43 @@ def add_data(data_structs,data):
                                               loadfactor= 0.5,
                                               cmpfunction=None))
         mp.put(map,me.getKey(sector_entry),me.getValue(sector_entry))
-        lst = mp.get(map,"elements")
+        
+        lst = me.getValue(mp.get(map,"elements"))
         lt.addLast(lst,data)
         
         entry_sector = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=8,maptype = "PROBING",
                                               loadfactor= 0.5,
                                               cmpfunction=None))
-        mp.put(map["sector"],me.getKey(entry_sector),me.getValue(entry_sector))
-        lst_sector = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
-                                                                  compare))
-        mp.put(map["sector"],me.getKey(lst_sector),me.getValue(lst_sector))
-        #falta hacer la parte de la suma
-            
-                        
-        entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
-                                              loadfactor= 0.5,
-                                              cmpfunction=None))
-        mp.put(map["sub_sector"],me.getKey(entry_sub),me.getValue(entry_sub))
+        
+        map_sectores = me.getValue(mp.get(map,"sector")) # obtenemos el map por sectores
+        
+        # [obtenemos el map de sector el cual tendra parejas (cod sector,map) , obtenemos la llave que deseamos meter, obtenemos el value que deseamos obtener]
+        mp.put(map_sectores,me.getKey(entry_sector),me.getValue(entry_sector)) 
+         
+        map_sector_cod = me.getValue(mp.get(map_sectores,me.getKey(entry_sector))) #encuentra el map de un sector economico especifico
         
         lst_sector = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
-                                                                  compare))
-        mp.put(map["sub_sector"][data["Código subsector económico"]],me.getKey(lst_sector),me.getValue(lst_sector))
+                                                                  None)) # esta pareja llave valor contiene como llave un  str y como valor el array_klist de los elementos pertencienctes al a un sector economico especifico
+             
+        mp.put(map_sector_cod,me.getKey(lst_sector),me.getValue(lst_sector)) # ponemos el array_list que contendra todos los elementos de este sector en el map pertenciente a ese sector
+        lt.addLast(me.getValue(mp.get(map_sector_cod,me.getKey(lst_sector))),data) # añade el elemento a la lista del subsector al que pertenece
+        
+        #falta hacer la parte de la suma
+        
+        entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
+                                              loadfactor= 0.5,
+                                              cmpfunction=None)) # crea pareja llave valor entry_sub (codigo_sub_sector,map del sub_sector)
+        
+        map_sub_sector = me.getValue(mp.get(map,"sub_sector"))
+        mp.put(map_sub_sector,me.getKey(entry_sub),me.getValue(entry_sub))
+        
+        lst_sector = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
+                                                                  None))
+        map_sub_sector_cod =me.getValue(mp.get(map_sub_sector,me.getKey(entry_sub))) # obtenemos el map de un cod de un subsector
+        
+        mp.put(map_sub_sector_cod,me.getKey(lst_sector),me.getValue(lst_sector))
+        lt.addLast(me.getValue(mp.get(map_sector_cod,"elements")),data) # añadimos el elemento a la lista de su respectivo sub:sector
+                
         #falta hacer la parte de la suma
     return data_structs
         
