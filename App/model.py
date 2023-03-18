@@ -461,8 +461,9 @@ def req_4(data_structs,anio):
             diccio["codigo sector"] =  actividad["Código sector económico"]
             diccio["nombre subsector"] =  actividad["Nombre subsector económico"]
             diccio["codigo subsector"] =  actividad["Código subsector económico"]
-                        
+            
             mayor = diccio["Costos y gastos nomina"]
+            
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,sort_req_4)
     dic_act = {"mas": [],"menos":[]}
