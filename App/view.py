@@ -148,8 +148,9 @@ def print_req_4(control,anio):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     req_4 = controller.req_4(control,anio)
-    print(req_4)
-
+    print(req_4[0])
+    print(len(req_4[1]["menos"]))
+    #falta mostrarlo bonito
 
 def print_req_5(control):
     """
@@ -203,7 +204,7 @@ if __name__ == "__main__":
                 print("Cargando información de los archivos ....\n")
                 data = load_data(control)
                 
-                print(data["anios"]["table"]["elements"][4]["value"]["table"]["elements"][0])
+                print(data)
                 
                 
                 print("el totoal de fila guardas",data["size"])

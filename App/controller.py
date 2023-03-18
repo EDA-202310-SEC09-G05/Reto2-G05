@@ -117,8 +117,8 @@ def req_4(control,anio):
     """
     Retorna el resultado del requerimiento 4
     """
-    diccio = model.req_4(control["model"],anio)
-    return diccio
+    tupla = model.req_4(control["model"],anio)
+    return tupla
 
 
 def req_5(control):
