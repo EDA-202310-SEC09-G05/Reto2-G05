@@ -67,6 +67,7 @@ def load_data(control, filename):
             int(i["Código actividad económica"])
         model.add_data(Data_struct,i)
         Data_struct["size"]+=1
+        print(Data_struct["size"])
     return Data_struct
 
 # Funciones de ordenamiento
