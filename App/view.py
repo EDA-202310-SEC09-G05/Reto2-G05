@@ -62,62 +62,14 @@ def print_menu():
     print("0- Salir")
 
 
-def load_data(control):
+def load_data(control,memflag):
     """
     Carga los datos
     """
     nombre_archivo= tamanio_muestra()
-    
-    data = controller.load_data(control, nombre_archivo)
-    
-    return data
+    tipo_mapa,factor_carga=conf_mapa()
+    return controller.load_data(control, nombre_archivo,tipo_mapa,factor_carga,memflag)
 
-
-
-def tamanio_muestra():
-    """
-        Permite seleccionar el tamaño de la muestra que el usuario desea
-
-    Args:
-        opcion: la opcion seleccionada por el usuario
-    """
-    print("Seleccione el porcentaje de la lista que desea usar\n")
-    print("1 0.5%")
-    print("2 5%")
-    print("3 10%")
-    print("4 20%")
-    print("5 30%")
-    print("6 50%")
-    print("7 80%")
-    print("8 100%")
-                
-    opcion=int(input("-> "))
-    
-    text = "Data/DIAN/"
-    if opcion == 1:
-       return text + "Salida_agregados_renta_juridicos_AG-small.csv"
-    elif opcion == 2:
-        return text + "Salida_agregados_renta_juridicos_AG-5pct.csv"
-    elif opcion == 3:
-        return text + "Salida_agregados_renta_juridicos_AG-10pct.csv"
-    elif opcion == 4:
-        return text + "Salida_agregados_renta_juridicos_AG-20pct.csv"
-    elif opcion == 5:
-        return text + "Salida_agregados_renta_juridicos_AG-30pct.csv"
-    elif opcion == 6:
-        return text + "Salida_agregados_renta_juridicos_AG-50pct.csv"
-    elif opcion == 7:
-        return text + "Salida_agregados_renta_juridicos_AG-80pct.csv"
-    elif opcion == 8:
-        return text + "Salida_agregados_renta_juridicos_AG-large.csv"
-
-
-def print_data(control, id):
-    """
-        Función que imprime un dato dado su ID
-    """
-    #TODO: Realizar la función para imprimir un elemento
-    pass
 
 def print_req_1(control):
     """
@@ -187,6 +139,77 @@ def print_req_8(control):
 # Se crea el controlador asociado a la vista
 control = new_controller()
 
+#Funciones para el view
+def tamanio_muestra():
+    """
+        Permite seleccionar el tamaño de la muestra que el usuario desea
+
+    Args:
+        opcion: la opcion seleccionada por el usuario
+    """
+    print("Seleccione el porcentaje de la lista que desea usar\n")
+    print("1 0.5%")
+    print("2 5%")
+    print("3 10%")
+    print("4 20%")
+    print("5 30%")
+    print("6 50%")
+    print("7 80%")
+    print("8 100%")
+                
+    opcion=int(input("-> "))
+    
+    text = "/Data/DIAN/"
+    if opcion == 1:
+       return text + "Salida_agregados_renta_juridicos_AG-small.csv"
+    elif opcion == 2:
+        return text + "Salida_agregados_renta_juridicos_AG-5pct.csv"
+    elif opcion == 3:
+        return text + "Salida_agregados_renta_juridicos_AG-10pct.csv"
+    elif opcion == 4:
+        return text + "Salida_agregados_renta_juridicos_AG-20pct.csv"
+    elif opcion == 5:
+        return text + "Salida_agregados_renta_juridicos_AG-30pct.csv"
+    elif opcion == 6:
+        return text + "Salida_agregados_renta_juridicos_AG-50pct.csv"
+    elif opcion == 7:
+        return text + "Salida_agregados_renta_juridicos_AG-80pct.csv"
+    elif opcion == 8:
+        return text + "Salida_agregados_renta_juridicos_AG-large.csv"
+
+def conf_mapa():
+    print("Seleccione el tipo de mapa que desea escoger: \n 1:PROBING \n 2:CHAINING")
+    opcion_mapa=int(input("-> "))
+    
+    if opcion_mapa == 1:
+        tipo_mapa="PROBING"
+    elif opcion_mapa ==2:
+        tipo_mapa="CHAINING"
+    
+    print("Seleccione el factor de carga que desea utilizar. Recuerde utilizar puntos y escribir su número con al menos una cifra decimal.")
+    factor_carga=float(input("-> "))
+    #if tipo_mapa=="PROBING" and factor_carga>=1.0:
+    #    print("Recuerde que no se debe usar un factor de carga mayor o igual que uno con PROBING. \nEs recomendable que detenga la ejecución de INMEDIATO.")
+    return tipo_mapa,factor_carga
+
+def castBoolean(value):
+    """
+    Convierte un valor a booleano
+    """
+    if value in ('True', 'true', 'TRUE', 'T', 't', '1', 1, True):
+        return True
+    else:
+        return False
+
+def printLoadDataAnswer(answer):
+    """
+    Imprime los datos de tiempo y memoria de la carga de datos
+    """
+    if isinstance(answer, (list, tuple)) is True:
+        print("Tiempo [ms]: ", f"{answer[0]:.3f}", "||",
+              "Memoria [kB]: ", f"{answer[1]:.3f}")
+    else:
+        print("Tiempo [ms]: ", f"{answer:.3f}")
 
 # main del reto
 if __name__ == "__main__":
@@ -202,12 +225,15 @@ if __name__ == "__main__":
             if int(inputs) == 1:
 
                 print("Cargando información de los archivos ....\n")
-                data = load_data(control)
+                print("Desea observar el uso de memoria? (True/False)")
+                mem = input("Respuesta: ")
+                mem = castBoolean(mem)
+                answer = load_data(control, memflag=mem)
                 
-                print(data)
+                print("El total de filas guardas es ",controller.tamanio_filas_cargadas(control))
                 
+                printLoadDataAnswer(answer)
                 
-                print("el totoal de fila guardas",data["size"])
             elif int(inputs) == 2:
                 print_req_1(control)
 

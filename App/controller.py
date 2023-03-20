@@ -44,12 +44,21 @@ def new_controller():
 
 # Funciones para la carga de datos
 
-def load_data(control, filename):
+def load_data(control, filename, tipo_mapa,factor_carga,memflag=True):
     """
     Carga los datos del reto
     """
+    # toma el tiempo al inicio del proceso
+    start_time = getTime()
+
+    # inicializa el proceso para medir memoria
+    if memflag is True:
+        tracemalloc.start()
+        start_memory = getMemory()
     
+    #Carga de datos
     Data_struct = control["model"]
+    filename = cf.data_dir + filename
     Input_file = csv.DictReader(open(filename,encoding="utf-8"))
     
     for i in Input_file:
@@ -65,10 +74,30 @@ def load_data(control, filename):
                     break
             i["Código actividad económica"] = c
             int(i["Código actividad económica"])
-        model.add_data(Data_struct,i)
+        model.add_data(Data_struct,i,tipo_mapa,factor_carga)
         Data_struct["size"]+=1
-        print(Data_struct["size"])
-    return Data_struct
+        #print(Data_struct["size"])
+    
+        # toma el tiempo al final del proceso
+    stop_time = getTime()
+    # calculando la diferencia en tiempo
+    delta_time = deltaTime(stop_time, start_time)
+
+    # finaliza el proceso para medir memoria
+    if memflag is True:
+        stop_memory = getMemory()
+        tracemalloc.stop()
+        # calcula la diferencia de memoria
+        delta_memory = deltaMemory(stop_memory, start_memory)
+        # respuesta con los datos de tiempo y memoria
+        return delta_time, delta_memory
+
+    else:
+        # respuesta sin medir memoria
+        return delta_time
+
+def tamanio_filas_cargadas(control):
+    return control["model"]["size"]
 
 # Funciones de ordenamiento
 
@@ -155,28 +184,28 @@ def req_8(control):
 
 # Funciones para medir tiempos de ejecucion
 
-def get_time():
+def getTime():
     """
     devuelve el instante tiempo de procesamiento en milisegundos
     """
     return float(time.perf_counter()*1000)
 
 
-def delta_time(start, end):
+def deltaTime(end,start):
     """
     devuelve la diferencia entre tiempos de procesamiento muestreados
     """
     elapsed = float(end - start)
     return elapsed
 
-def get_memory():
+def getMemory():
     """
     toma una muestra de la memoria alocada en instante de tiempo
     """
     return tracemalloc.take_snapshot()
 
 
-def delta_memory(stop_memory, start_memory):
+def deltaMemory(stop_memory, start_memory):
     """
     calcula la diferencia en memoria alocada del programa entre dos
     instantes de tiempo y devuelve el resultado en bytes (ej.: 2100.0 B)

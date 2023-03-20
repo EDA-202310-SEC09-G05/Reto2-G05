@@ -53,7 +53,7 @@ def new_data_structs():
     """
     
     data_structs = {
-            "size": 0,
+            "size": 0,#tamaño de las filas cargadas
             "anios": None
             }
     data_structs["anios"] = mp.newMap(numelements=11,maptype = "PROBING",
@@ -65,10 +65,10 @@ def new_data_structs():
 
 
 # Funciones para agregar informacion al modelo
-def create_base(data_structs,data):
+def create_base(data_structs,data,tipo_mapa,factor_carga):
         new_map = me.newMapEntry(data["Año"],mp.newMap(3,
-                                              maptype = "PROBING",
-                                              loadfactor= 0.5,
+                                              maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None))
         mp.put(data_structs["anios"],me.getKey(new_map),me.getValue(new_map))
         
@@ -79,20 +79,20 @@ def create_base(data_structs,data):
         
         mp.put(map,me.getKey(element_entry),me.getValue(element_entry))
         
-        subsector_entry = me.newMapEntry("sub_sector",mp.newMap(21,maptype = "PROBING",
-                                              loadfactor= 0.5,
+        subsector_entry = me.newMapEntry("sub_sector",mp.newMap(21,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None))
         mp.put(map,me.getKey(subsector_entry),me.getValue(subsector_entry))
         
-        sector_entry = me.newMapEntry("sector",mp.newMap(12,maptype = "PROBING",
-                                              loadfactor= 0.5,
+        sector_entry = me.newMapEntry("sector",mp.newMap(12,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None))
         mp.put(map,me.getKey(sector_entry),me.getValue(sector_entry))
         
 
         
-        entry_sector = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=2,maptype = "PROBING",
-                                              loadfactor= 0.5,
+        entry_sector = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=2,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None))
         
         map_sectores = me.getValue(mp.get(map,"sector")) # obtenemos el map por sectores
@@ -112,8 +112,8 @@ def create_base(data_structs,data):
         mp.put(map_sector_cod,me.getKey(suma_ingresos_netos_sector),me.getValue(suma_ingresos_netos_sector)) # añadimos la sumatoria ingresos netos inicial 0
         #---------- suma ---------
         
-        entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
-                                              loadfactor= 0.5,
+        entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None)) # crea pareja llave valor entry_sub (codigo_sub_sector,map del sub_sector)
         
         map_sub_sector = me.getValue(mp.get(map,"sub_sector"))
@@ -195,7 +195,7 @@ def create_base(data_structs,data):
         #/ pareja llave valor saldo a favor
         
         #------------- parte de la suma --------------#
-def add(data_structs,data):
+def add(data_structs,data,tipo_mapa,factor_carga):
         map =  me.getValue(mp.get(data_structs["anios"],data["Año"]))
         lst = me.getValue(mp.get(map,"elements"))
         lt.addLast(lst,data) #añade la nueva actividad economica a la lista con todas las actividades economicas del año
@@ -203,8 +203,8 @@ def add(data_structs,data):
         map_sectores = me.getValue(mp.get(map,"sector"))
         
         if not(mp.contains(map_sectores,data["Código sector económico"])):
-            entry = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=2,maptype = "PROBING",
-                                              loadfactor= 0.5,
+            entry = me.newMapEntry(data["Código sector económico"],mp.newMap(numelements=2,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None)) # Creamos la pareja llave valor de (cod_sector,map_sector)
             mp.put(map_sectores,me.getKey(entry),me.getValue(entry))
             
@@ -295,8 +295,8 @@ def add(data_structs,data):
             #------------- parte de la suma --------------#
 
         else:
-            entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = "PROBING",
-                                              loadfactor= 0.5,
+            entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = tipo_mapa,
+                                              loadfactor= factor_carga,
                                               cmpfunction=None)) # Creamos la pareja llave valor de (cod_sub_sector,map_sector)
             
             mp.put(map_sub_sectores,me.getKey(entry),me.getValue(entry))
@@ -371,11 +371,11 @@ def add(data_structs,data):
         
             #------------- parte de la suma --------------#
     
-def add_data(data_structs,data):
+def add_data(data_structs,data,tipo_mapa,factor_carga):
     
     if not(mp.contains(data_structs["anios"],data["Año"])): # se revisa si el año existe
-        create_base(data_structs,data)
-    add(data_structs,data)
+        create_base(data_structs,data,tipo_mapa,factor_carga)
+    add(data_structs,data,tipo_mapa,factor_carga)
     
     return data_structs
         
