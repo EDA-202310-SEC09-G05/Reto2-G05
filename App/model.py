@@ -494,13 +494,28 @@ def req_6(data_structs):
     pass
 
 
-def req_7(data_structs):
+def req_7(data_structs,anio,subsector,top):
     """
     Función que soluciona el requerimiento 7
     """
-    # TODO: Realizar el requerimiento 7
-    pass
+    print(data_structs)
+    print("ASDFGHJKLÑSDFGHYJUKILÑSDFGHJKL")
+    
 
+    año = mp.get(data_structs,anio)
+    map_anio = me.getValue(año)
+    sub = mp.get(map_anio,"sub_sector")
+    map_sub = me.getValue(sub)
+    map_subsectores = mp.get(map_sub,subsector)
+    map_subsector = me.getValue(map_subsectores)
+    pareja = mp.get(map_subsector,"elements")
+    lst = me.getValue(pareja)
+    
+    lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
+    sa.sort(lst,sort_req7)
+    for i in range(1,top+1):
+        lt.addLast(lst_top,lt.getElement(lst,i))
+    return lst_top        
 
 def req_8(data_structs):
     """
@@ -547,6 +562,11 @@ def sort_criteria(data_1, data_2):
     #TODO: Crear función comparadora para ordenar
     pass
 
+def sort_req7(data1,data2):
+    if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
+        return True
+    else:
+        return False
 
 def sort(data_structs):
     """

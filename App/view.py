@@ -120,12 +120,13 @@ def print_req_6(control):
     pass
 
 
-def print_req_7(control):
+def print_req_7(control,subsector,top,anio):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    lst_top = controller.req_7(control,anio,subsector,top)
+    print(lst_top)
 
 
 def print_req_8(control):
@@ -254,7 +255,10 @@ if __name__ == "__main__":
                 print_req_6(control)
 
             elif int(inputs) == 8:
-                print_req_7(control)
+                anio = input("ingrese el año del cual desea ver el top de actividades economicas: ")
+                subsector = int(input("ingrese el subsector del cual desea ver el top de actividades economicas: "))
+                top = int(input("Ingrese el top que desea ver: "))
+                print_req_7(control,subsector,top,anio)
 
             elif int(inputs) == 9:
                 print_req_8(control)
