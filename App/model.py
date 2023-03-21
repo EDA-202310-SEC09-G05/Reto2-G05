@@ -498,11 +498,9 @@ def req_7(data_structs,anio,subsector,top):
     """
     Función que soluciona el requerimiento 7
     """
-    print(data_structs)
-    print("ASDFGHJKLÑSDFGHYJUKILÑSDFGHJKL")
     
 
-    año = mp.get(data_structs,anio)
+    año = mp.get(data_structs["anios"],anio)
     map_anio = me.getValue(año)
     sub = mp.get(map_anio,"sub_sector")
     map_sub = me.getValue(sub)
@@ -565,6 +563,10 @@ def sort_criteria(data_1, data_2):
 def sort_req7(data1,data2):
     if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
         return True
+    elif data1["Total costos y gastos"] == data2["Total costos y gastos"]:
+        if data1["Código actividad económica"] > data2["Código actividad económica"]:
+            return True
+        return False
     else:
         return False
 

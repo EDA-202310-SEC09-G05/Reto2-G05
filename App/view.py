@@ -256,7 +256,7 @@ if __name__ == "__main__":
 
             elif int(inputs) == 8:
                 anio = input("ingrese el año del cual desea ver el top de actividades economicas: ")
-                subsector = int(input("ingrese el subsector del cual desea ver el top de actividades economicas: "))
+                subsector = input("ingrese el subsector del cual desea ver el top de actividades economicas: ")
                 top = int(input("Ingrese el top que desea ver: "))
                 print_req_7(control,subsector,top,anio)
 
