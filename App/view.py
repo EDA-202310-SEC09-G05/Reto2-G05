@@ -130,13 +130,17 @@ def print_req_4(control,anio):
     print(len(req_4[1]["menos"]))
     #falta mostrarlo bonito
 
-def print_req_5(control):
+def print_req_5(control,anio):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
-    pass
-
+    mayor_subsector,arraylist=controller.req_5(control,anio)
+    
+    print("Subsector económico con los mayores Descuentos tributarios en "+str(anio))
+    imprimir_tabla(mayor_subsector,lt.getElement(mayor_subsector,1).keys())
+    
+    print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(lt.getElement(mayor_subsector,1)["Código subsector económico"])+" son:")
+    imprimir_tabla(arraylist,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 
 def print_req_6(control):
     """
@@ -288,7 +292,8 @@ if __name__ == "__main__":
                 print_req_4(control,anio)
 
             elif int(inputs) == 6:
-                print_req_5(control)
+                anio_req5 = input("Ingrese el año para el cual desea encontrar el subsector que tuvo los mayores descuentos tributarios: \n ->")
+                print_req_5(control,anio_req5)
 
             elif int(inputs) == 7:
                 print_req_6(control)

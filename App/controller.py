@@ -97,7 +97,8 @@ def load_data(control, filename, tipo_mapa,factor_carga,memflag=True):
         return delta_time
 
 def tamanio_filas_cargadas(control):
-    return control["model"]["size"]
+    size=model.data_size(control["model"])
+    return size
 
 # Funciones de ordenamiento
 
@@ -149,12 +150,11 @@ def req_4(control,anio):
     return tupla
 
 
-def req_5(control):
+def req_5(control,anio):
     """
     Retorna el resultado del requerimiento 5
     """
-    # TODO: Modificar el requerimiento 5
-    pass
+    return model.req_5(control["model"],anio)
 
 def req_6(control):
     """
@@ -164,12 +164,11 @@ def req_6(control):
     pass
 
 
-def req_7(control):
+def req_7(control,anio,subsector,top):
     """
     Retorna el resultado del requerimiento 7
     """
-    # TODO: Modificar el requerimiento 7
-    pass
+    return model.req_7(control["model"],anio,subsector,top)
 
 
 def req_8(control):

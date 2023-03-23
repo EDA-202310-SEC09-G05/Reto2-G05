@@ -61,8 +61,6 @@ def new_data_structs():
                                               cmpfunction=None)    
     return data_structs
     
-    
-
 
 # Funciones para agregar informacion al modelo
 def create_base(data_structs,data,tipo_mapa,factor_carga):
@@ -194,6 +192,11 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
         
         #/ pareja llave valor saldo a favor
         
+        #pareja llave valor descuentos tributarios
+        entry_dt = me.newMapEntry("Descuentos tributarios",0)
+        mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_sf))
+        #pareja llave valor descuentos tributarios
+        
         #------------- parte de la suma --------------#
 def add(data_structs,data,tipo_mapa,factor_carga):
         map =  me.getValue(mp.get(data_structs["anios"],data["Año"]))
@@ -288,8 +291,10 @@ def add(data_structs,data,tipo_mapa,factor_carga):
             #/ pareja llave valor saldo a favor
             #pareja (llave,valor) Total descuentos tributarios
             
-            #TODO
-            
+            dt = me.getValue(mp.get(map_sub_sector_cod,"Descuentos tributarios"))
+            dt += int(data["Descuentos tributarios"])
+            entry_dt = me.newMapEntry("Descuentos tributarios",dt)
+            mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
             #/pareja (llave,valor) Total descuentos tributarios
         
             #------------- parte de la suma --------------#
@@ -364,9 +369,8 @@ def add(data_structs,data,tipo_mapa,factor_carga):
             #/ pareja llave valor saldo a favor
             
             #pareja (llave,valor) descuentos tributarios
-            
-            #TODO realizar suma de descuentos tributarios
-            
+            entry_dt = me.newMapEntry("Descuentos tributarios",int(data["Descuentos tributarios"]))
+            mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_sf))
             #/pareja (llave,valor) descuentos tributarios
         
             #------------- parte de la suma --------------#
@@ -379,36 +383,14 @@ def add_data(data_structs,data,tipo_mapa,factor_carga):
     
     return data_structs
         
-    
-    
-    
-
-# Funciones para creacion de datos
-
-def new_data(id, info):
-    """
-    Crea una nueva estructura para modelar los datos
-    """
-    #TODO: Crear la función para estructurar los datos
-    pass
-
 
 # Funciones de consulta
-
-def get_data(data_structs, id):
-    """
-    Retorna un dato a partir de su ID
-    """
-    #TODO: Crear la función para obtener un dato de una lista
-    pass
-
 
 def data_size(data_structs):
     """
     Retorna el tamaño de la lista de datos
     """
-    #TODO: Crear la función para obtener el tamaño de una lista
-    pass
+    return data_structs["size"]
 
 
 def req_1(data_structs):
@@ -478,12 +460,54 @@ def req_4(data_structs,anio):
     return diccio,dic_act #falta de dovelver la tupla con ambos dict
 
 
-def req_5(data_structs):
+def diccio_requ5(registro,mapa_subsector):
+    return{
+        "Código sector económico":registro["Código sector económico"],
+        "Nombre sector económico":registro["Nombre sector económico"],
+        "Código subsector económico":registro["Código subsector económico"],
+        "Nombre subsector económico":registro["Nombre subsector económico"],
+        "Total de descuentro tributarios del subsector económico":me.getValue(mp.get(mapa_subsector,"Descuentos tributarios")),
+        "Total de ingresos netos del subsector económico":me.getValue(mp.get(mapa_subsector,"ingresos netos")),
+        "Total costos y gastos del subsector económico":me.getValue(mp.get(mapa_subsector,"costos y gastos")),
+        "Total saldo a pagar del subsector económico":me.getValue(mp.get(mapa_subsector,"saldo a pagar")),
+        "Total saldo a favor del subsector económico":me.getValue(mp.get(mapa_subsector,"saldo a favor"))
+    }
+
+def req_5(data_structs,anio):
     """
     Función que soluciona el requerimiento 5
     """
-    # TODO: Realizar el requerimiento 5
-    pass
+    #Busqueda
+    
+    mapa=me.getValue(mp.get(data_structs["anios"],anio))
+    mapa_sub_sectores=me.getValue(mp.get(mapa,"sub_sector"))
+    mayor=0
+    
+    for cod_subsector in lt.iterator(mp.keySet(mapa_sub_sectores)):
+        subsector=me.getValue(mp.get(mapa_sub_sectores,cod_subsector))
+        
+        Total_descuentos_tributarios=me.getValue(mp.get(subsector,"Descuentos tributarios"))
+        
+        if Total_descuentos_tributarios>mayor:
+            mayor=Total_descuentos_tributarios
+            map_subsector_mayor=subsector
+    
+    #Retorno
+    actividades_subsector=me.getValue(mp.get(map_subsector_mayor,"elements"))
+    sort(actividades_subsector,"cmp_5")
+    sub_arraylist=lt.newList("ARRAY_LIST")
+    if lt.size(actividades_subsector)<6:
+        sub_arraylist=actividades_subsector
+    else:
+        for i in range(1,4):
+            lt.addLast(sub_arraylist,lt.getElement(actividades_subsector,i))
+        for i in range(2,-1,-1):
+            lt.addLast(sub_arraylist,lt.getElement(actividades_subsector,lt.size(actividades_subsector)-i))
+    
+    mayor_subsector=lt.newList("ARRAY_LIST")    
+    lt.addLast(mayor_subsector,diccio_requ5(lt.getElement(actividades_subsector,1),map_subsector_mayor))
+    return mayor_subsector,sub_arraylist
+    
 
 
 def req_6(data_structs):
@@ -549,7 +573,9 @@ def sort_req_4(data_1,data_2):
         return True
     else:
         return False
-    
+
+def cmp_req_5(data1,data2):
+    return int(data1["Descuentos tributarios"]) < int(data2["Descuentos tributarios"])
 
 def sort_req7(data1,data2):
     if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
@@ -572,6 +598,8 @@ def sort(lista,tipo):
         criterio=cmp_cod_actividad_economica
     elif tipo == "anio":
         criterio=cmp_anio
+    elif tipo == "cmp_5":
+        criterio=cmp_req_5
         
     lista = sa.sort(lista,criterio)
     
