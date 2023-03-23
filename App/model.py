@@ -474,12 +474,17 @@ def req_1(data_structs,anio,sector):
     return mayor_dict
 
 
-def req_2(data_structs):
+def req_2(data_structs,anio,cod_sector):
     """
     Función que soluciona el requerimiento 2
     """
-    # TODO: Realizar el requerimiento 2
-    pass
+    mapa_anio=me.getValue(mp.get(data_structs["anios"],anio))
+    mapa_sector=me.getValue(mp.get(me.getValue(mp.get(mapa_anio,"sector")),cod_sector))
+    
+    elements=me.getValue(mp.get(mapa_sector,"elements"))
+    sort(elements,"cmp_2")
+    
+    return lt.getElement(elements,1)
 
 
 def req_3(data_structs):
@@ -716,6 +721,8 @@ def compare(data_1, data_2):
 def cmp_cod_actividad_economica(data1,data2):
     return int(data1["Código actividad económica"]) < int(data2["Código actividad económica"])
 
+def cmp_req2(data1,data2):
+    return int(data1["Total saldo a favor"]) > int(data2["Total saldo a favor"])
 
 def cmp_req_4(data_1,data_2):
     if int(data_1["Costos y gastos nómina"]) > int(data_2["Costos y gastos nómina"]):
@@ -748,6 +755,8 @@ def sort(lista,tipo):
         criterio=cmp_cod_actividad_economica
     elif tipo == "anio":
         criterio=cmp_anio
+    elif tipo =="cmp_2":
+        criterio=cmp_req2
     elif tipo == "cmp_5":
         criterio=cmp_req_5
     elif tipo=="cmp_6":

@@ -101,17 +101,20 @@ def print_req_1(control,anio,sector):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
+    lista=lt.newList("ARRAY_LIST")
     act = controller.req_1(control,anio,sector)
-    print(act)
-    #TODO falta tabular
+    lt.addLast(lista,act)
+    imprimir_tabla(lista,act.keys())
 
 
-def print_req_2(control):
+def print_req_2(control,anio,cod_sector):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    lista=lt.newList("ARRAY_LIST")
+    respuesta= controller.req_2(control,anio,cod_sector)
+    lt.addLast(lista,respuesta)
+    imprimir_tabla(lista,["Código actividad económica","Nombre actividad económica","Código subsector económico","Nombre subsector económico","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 
 
 def print_req_3(control):
@@ -305,7 +308,9 @@ if __name__ == "__main__":
                 print_req_1(control,anio,sector)
 
             elif int(inputs) == 3:
-                print_req_2(control)
+                anio_req2 = input("Ingrese el año: ")
+                cod_sector=input("Ingrese el código del sector: ")
+                print_req_2(control,anio_req2,cod_sector)
 
             elif int(inputs) == 4:
                 print_req_3(control)
