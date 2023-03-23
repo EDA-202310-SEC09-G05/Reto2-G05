@@ -540,6 +540,9 @@ def compare(data_1, data_2):
         return False
 
 # Funciones de ordenamiento
+def cmp_cod_actividad_economica(data1,data2):
+    return int(data1["Código actividad económica"]) < int(data2["Código actividad económica"])
+
 
 def sort_req_4(data_1,data_2):
     if data_1["Costos y gastos nómina"] > data_2["Costos y gastos nómina"]:
@@ -547,18 +550,6 @@ def sort_req_4(data_1,data_2):
     else:
         return False
     
-def sort_criteria(data_1, data_2):
-    """sortCriteria criterio de ordenamiento para las funciones de ordenamiento
-
-    Args:
-        data1 (_type_): _description_
-        data2 (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    #TODO: Crear función comparadora para ordenar
-    pass
 
 def sort_req7(data1,data2):
     if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
@@ -569,11 +560,19 @@ def sort_req7(data1,data2):
         return False
     else:
         return False
+    
+def cmp_anio(anio1,anio2):
+    return int(anio1)>int(anio2)
 
-def sort(data_structs):
+def sort(lista,tipo):
     """
-    Función encargada de ordenar la lista con los datos
+    Función encargada de ordenar una lista
     """
-    #TODO: Crear función de ordenamiento
-    pass
+    if tipo=="cod_act_eco":
+        criterio=cmp_cod_actividad_economica
+    elif tipo == "anio":
+        criterio=cmp_anio
+        
+    lista = sa.sort(lista,criterio)
+    
 

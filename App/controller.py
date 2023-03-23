@@ -101,22 +101,20 @@ def tamanio_filas_cargadas(control):
 
 # Funciones de ordenamiento
 
-def sort(control):
+def sort(lista,tipo):
     """
     Ordena los datos del modelo
     """
-    #TODO: Llamar la función del modelo para ordenar los datos
-    pass
+    model.sort(lista,tipo)
 
 
 # Funciones de consulta sobre el catálogo
 
-def get_data(control, id):
+def get_map_anios(control):
     """
-    Retorna un dato por su ID.
+    Retorna el mapa con las parejas llave-valor años-mapa.
     """
-    #TODO: Llamar la función del modelo para obtener un dato
-    pass
+    return control["model"]["anios"]
 
 
 def req_1(control):
@@ -166,12 +164,12 @@ def req_6(control):
     pass
 
 
-def req_7(control,anio,subsector,top):
+def req_7(control):
     """
     Retorna el resultado del requerimiento 7
     """
-    return model.req_7(control["model"],anio,subsector,top)
-    
+    # TODO: Modificar el requerimiento 7
+    pass
 
 
 def req_8(control):

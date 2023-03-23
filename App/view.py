@@ -1,4 +1,4 @@
-﻿"""
+"""
  * Copyright 2020, Departamento de sistemas y Computación, Universidad
  * de Los Andes
  *
@@ -70,6 +70,32 @@ def load_data(control,memflag):
     tipo_mapa,factor_carga=conf_mapa()
     return controller.load_data(control, nombre_archivo,tipo_mapa,factor_carga,memflag)
 
+
+def print_load_data(control):
+    mapa=controller.get_map_anios(control)
+    headers=["Año","Código actividad económica","Nombre actividad económica","Código sector económico","Nombre sector económico","Código subsector económico","Nombre subsector económico","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"]
+    lista_anios=mp.keySet(mapa)
+    controller.sort(lista_anios,"anio")
+    
+    for anio in lt.iterator(lista_anios):
+        mapa_anio=me.getValue(mp.get(mapa,anio))
+        arraylist=me.getValue(mp.get(mapa_anio,"elements"))
+        controller.sort(arraylist,"cod_act_eco")
+            
+        if lt.size(arraylist)<6:
+            print("Solo hay "+str(lt.size(arraylist))+" actividades económicas en el año "+str(anio)+".")
+            imprimir_tabla(arraylist,headers)
+        else:
+            print("Las actividades tres primeras y tres últimas actividades económicas cargadas en "+str(anio)+ " son:")       
+            
+            sub_arraylist=lt.newList("ARRAY_LIST")
+            for i in range(1,4):
+                lt.addLast(sub_arraylist,lt.getElement(arraylist,i))
+            for i in range(2,-1,-1):
+                lt.addLast(sub_arraylist,lt.getElement(arraylist,lt.size(arraylist)-i))
+        
+            imprimir_tabla(sub_arraylist,headers)
+   
 
 def print_req_1(control):
     """
@@ -211,6 +237,18 @@ def printLoadDataAnswer(answer):
               "Memoria [kB]: ", f"{answer[1]:.3f}")
     else:
         print("Tiempo [ms]: ", f"{answer:.3f}")
+#imprimir tablas
+def imprimir_tabla(lista,headers):
+    
+    datos=[]
+    for dato in lt.iterator(lista):
+        fila = []
+        for header in headers:
+            fila.append(dato[header])
+        datos.append(fila)
+
+    print(tabulate(datos, headers, tablefmt='grid', maxcolwidths=9, maxheadercolwidths=9))
+    
 
 # main del reto
 if __name__ == "__main__":
@@ -226,14 +264,15 @@ if __name__ == "__main__":
             if int(inputs) == 1:
 
                 print("Cargando información de los archivos ....\n")
+                
                 print("Desea observar el uso de memoria? (True/False)")
                 mem = input("Respuesta: ")
                 mem = castBoolean(mem)
                 answer = load_data(control, memflag=mem)
+                printLoadDataAnswer(answer)
                 
                 print("El total de filas guardas es ",controller.tamanio_filas_cargadas(control))
-                
-                printLoadDataAnswer(answer)
+                print_load_data(control)
                 
             elif int(inputs) == 2:
                 print_req_1(control)
