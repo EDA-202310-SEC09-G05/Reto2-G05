@@ -146,9 +146,15 @@ def print_req_6(control,anio):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    lista = controller.req_6(control,anio)
+    lista_sector,mayor_subsector,menor_subsector = controller.req_6(control,anio)
+    print("El sector económico con mayores ingresos netos en el año "+ str(anio) +" es:")
+    imprimir_tabla(lista_sector,lt.getElement(lista_sector,1).keys())
     
-    imprimir_tabla(lista,lt.getElement(lista,1).keys())
+    print("El subsector que más contribuyó es:")
+    imprimir_tabla(mayor_subsector,lt.getElement(mayor_subsector,1).keys(),25,30)
+    
+    print("El subsector que menos contribuyó es:")
+    imprimir_tabla(menor_subsector,lt.getElement(menor_subsector,1).keys(),25,30)
 
 
 def print_req_7(control,subsector,top,anio):
@@ -243,16 +249,24 @@ def printLoadDataAnswer(answer):
     else:
         print("Tiempo [ms]: ", f"{answer:.3f}")
 #imprimir tablas
-def imprimir_tabla(lista,headers):
+def imprimir_tabla(lista,headers,maxcolwidths=9,maxheadercolwidths=9):
     
     datos=[]
     for dato in lt.iterator(lista):
         fila = []
         for header in headers:
-            fila.append(dato[header])
+            try:
+                sub_datos=[]
+                for lista in lt.iterator(dato[header]):
+                    for sub_header in lista.keys():
+                        sub_datos.append([sub_header,lista[sub_header]])
+                    
+                fila.append(tabulate(sub_datos, tablefmt='grid',maxheadercolwidths=3,maxcolwidths=9))
+            except:
+                fila.append(dato[header])
         datos.append(fila)
 
-    print(tabulate(datos, headers, tablefmt='grid', maxcolwidths=9, maxheadercolwidths=9))
+    print(tabulate(datos, headers, tablefmt='grid', maxcolwidths=maxcolwidths, maxheadercolwidths=maxheadercolwidths))
     
 
 # main del reto

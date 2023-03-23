@@ -569,6 +569,39 @@ def lista_mayor_sector(registro,mapa_sector,cod_mayor_subsector,cod_menor_subsec
                       })
     return lista
 
+def crear_actividad_economica(registro_act):
+    return {"Código actividad económica":registro_act["Código actividad económica"],
+            "Nombre actividad económica":registro_act["Nombre actividad económica"],
+            "Total ingresos netos":registro_act["Total ingresos netos"],
+            "Total costos y gastos":registro_act["Total costos y gastos"],
+            "Total saldo a pagar":registro_act["Total saldo a pagar"],
+            "Total saldo a favor":registro_act["Total saldo a favor"]
+            }
+
+def lista_subsector(mapa_subsector):
+    lst=lt.newList("ARRAY_LIST")
+    registros=me.getValue(mp.get(mapa_subsector,"elements"))
+    sort(registros,"cmp_6")
+    registro_menor=lt.getElement(registros,1)
+    registro_mayor=lt.getElement(registros,lt.size(registros))
+    
+    lista_actividad_mayor=lt.newList("ARRAY_LIST")
+    lt.addLast(lista_actividad_mayor,crear_actividad_economica(registro_mayor))
+    
+    lista_Actividad_menor=lt.newList("ARRAY_LIST")
+    lt.addLast(lista_Actividad_menor,crear_actividad_economica(registro_menor))
+    
+    lt.addLast(lst,{"Código subsector económico":registro_mayor["Código subsector económico"],
+                    "Nombre subsector económico":registro_mayor["Nombre subsector económico"],
+                    "Total ingresos netos del subsector económico":me.getValue(mp.get(mapa_subsector,"ingresos netos")),
+                    "Total costos y gastos del subsector económico":me.getValue(mp.get(mapa_subsector,"costos y gastos")),
+                    "Total saldo a pagar del subsector económico":me.getValue(mp.get(mapa_subsector,"saldo a pagar")),
+                    "Total saldo a favor del subsector económico":me.getValue(mp.get(mapa_subsector,"saldo a favor")),
+                    "Actividad económica que más aportó":lista_actividad_mayor,
+                    "Actividad económica que menos aportó":lista_Actividad_menor
+    })
+    return lst
+
 def req_6(data_structs,anio):
     """
     Función que soluciona el requerimiento 6
@@ -602,9 +635,9 @@ def req_6(data_structs,anio):
             
     lista_sector = lista_mayor_sector(lt.getElement(me.getValue(mp.get(mayor_sector,"elements")),1),mayor_sector,cod_mayor_subsector,cod_menor_subsector)        
     
-    #lista_subsector_mayor = 
-    
-    return lista_sector
+    lista_subsector_mayor = lista_subsector(subsector_mayor)
+    lista_subsector_menor = lista_subsector(subsector_menor)
+    return lista_sector,lista_subsector_mayor,lista_subsector_menor
     
 
 
@@ -666,7 +699,8 @@ def sort_req_4(data_1,data_2):
 
 def cmp_req_5(data1,data2):
     return int(data1["Descuentos tributarios"]) < int(data2["Descuentos tributarios"])
-
+def cmp_req_6(data1,data2):
+    return int(data1["Total ingresos netos"])<int(data2["Total ingresos netos"])
 def sort_req7(data1,data2):
     if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
         return True
@@ -690,6 +724,8 @@ def sort(lista,tipo):
         criterio=cmp_anio
     elif tipo == "cmp_5":
         criterio=cmp_req_5
+    elif tipo=="cmp_6":
+        criterio=cmp_req_6
         
     lista = sa.sort(lista,criterio)
     
