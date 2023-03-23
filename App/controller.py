@@ -156,12 +156,11 @@ def req_5(control,anio):
     """
     return model.req_5(control["model"],anio)
 
-def req_6(control):
+def req_6(control,anio):
     """
     Retorna el resultado del requerimiento 6
     """
-    # TODO: Modificar el requerimiento 6
-    pass
+    return model.req_6(control["model"],anio)
 
 
 def req_7(control,anio,subsector,top):

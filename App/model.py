@@ -105,9 +105,22 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
              
         mp.put(map_sector_cod,me.getKey(lst_sector),me.getValue(lst_sector)) # ponemos el array_list que contendra todos los elementos de este sector en el map pertenciente a ese sector
         
+        #MOD REQ 6
+        subsectores_en_sector = me.newMapEntry("subsector en el sector",lt.newList("ARRAY_LIST"))
+        mp.put(map_sector_cod,me.getKey(subsectores_en_sector),me.getValue(subsectores_en_sector))
+        
         #---------- suma ----------
         suma_ingresos_netos_sector = me.newMapEntry("ingresos netos",0)
         mp.put(map_sector_cod,me.getKey(suma_ingresos_netos_sector),me.getValue(suma_ingresos_netos_sector)) # añadimos la sumatoria ingresos netos inicial 0
+        
+        suma_costos_y_gastos_sector = me.newMapEntry("costos y gastos",0)
+        mp.put(map_sector_cod,me.getKey(suma_costos_y_gastos_sector),me.getValue(suma_costos_y_gastos_sector))
+        
+        suma_saldo_a_pagar_sector = me.newMapEntry("saldo a pagar",0)
+        mp.put(map_sector_cod,me.getKey(suma_saldo_a_pagar_sector),me.getValue(suma_saldo_a_pagar_sector))
+        
+        suma_saldo_a_favor_sector = me.newMapEntry("saldo a favor",0)
+        mp.put(map_sector_cod,me.getKey(suma_saldo_a_favor_sector),me.getValue(suma_saldo_a_favor_sector))
         #---------- suma ---------
         
         entry_sub = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = tipo_mapa,
@@ -215,9 +228,23 @@ def add(data_structs,data,tipo_mapa,factor_carga):
             lst = me.newMapEntry("elements",lt.newList(datastructure="ARRAY_LIST",cmpfunction=
                                                                   compare))
             mp.put(map_sector_cod,me.getKey(lst),me.getValue(lst)) #ponemos la lista en el el el mapa de su respectivo sector
+            
+            #Subsectores en el sector---MOD req 6
+            subsectores_en_sector = me.newMapEntry("subsector en el sector",lt.newList("ARRAY_LIST"))
+            mp.put(map_sector_cod,me.getKey(subsectores_en_sector),me.getValue(subsectores_en_sector))
+            
             #---------- Creamos la suma -----------
             suma_ingresos_netos_sector = me.newMapEntry("ingresos netos",0)
             mp.put(map_sector_cod,me.getKey(suma_ingresos_netos_sector),me.getValue(suma_ingresos_netos_sector)) # añadimos la sumatoria ingresos netos inicial 0
+            
+            suma_costos_y_gastos_sector = me.newMapEntry("costos y gastos",0)
+            mp.put(map_sector_cod,me.getKey(suma_costos_y_gastos_sector),me.getValue(suma_costos_y_gastos_sector))
+        
+            suma_saldo_a_pagar_sector = me.newMapEntry("saldo a pagar",0)
+            mp.put(map_sector_cod,me.getKey(suma_saldo_a_pagar_sector),me.getValue(suma_saldo_a_pagar_sector))
+        
+            suma_saldo_a_favor_sector = me.newMapEntry("saldo a favor",0)
+            mp.put(map_sector_cod,me.getKey(suma_saldo_a_favor_sector),me.getValue(suma_saldo_a_favor_sector))
             #---------- Creamos la suma ----------
             
             
@@ -225,13 +252,33 @@ def add(data_structs,data,tipo_mapa,factor_carga):
         lst = me.getValue(mp.get(map_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
         lt.addLast(lst,data) # añadimos el nuevo elemento a esta lista
         
+        lista_subsectores_en_sector=me.getValue(mp.get(map_sector_cod,"subsector en el sector"))
+        if lt.isPresent(lista_subsectores_en_sector,data["Código subsector económico"])==0:
+            lt.addLast(lista_subsectores_en_sector,data["Código subsector económico"])
+            
         #------------- suma ingresos netos -------
         ingresos_netos = me.getValue(mp.get(map_sector_cod,"ingresos netos"))
         ingresos_netos += int(data["Total ingresos netos"])
         entry_ingresos_netos = me.newMapEntry("ingresos netos",ingresos_netos)
         mp.put(map_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos))
         #------------- suma ingresos netos------
-            
+        #otras sumas
+        suma_costos_y_gastos_sector = me.getValue(mp.get(map_sector_cod,"costos y gastos"))
+        suma_costos_y_gastos_sector += int(data["Total costos y gastos"])
+        entry_costos_y_gastos_sector=me.newMapEntry("costos y gastos",suma_costos_y_gastos_sector)
+        mp.put(map_sector_cod,me.getKey(entry_costos_y_gastos_sector),me.getValue(entry_costos_y_gastos_sector))
+        
+        suma_saldo_a_pagar_sector = me.getValue(mp.get(map_sector_cod,"saldo a pagar"))
+        suma_saldo_a_pagar_sector += int(data["Total saldo a pagar"])
+        entry_s_p_sec=me.newMapEntry("saldo a pagar",suma_saldo_a_pagar_sector)
+        mp.put(map_sector_cod,me.getKey(entry_s_p_sec),me.getValue(entry_s_p_sec))
+        
+        suma_saldo_a_favor_sector = me.getValue(mp.get(map_sector_cod,"saldo a favor"))
+        suma_saldo_a_favor_sector += int(data["Total saldo a favor"])
+        entry_s_a_f_sec=me.newMapEntry("saldo a favor",suma_saldo_a_favor_sector)
+        mp.put(map_sector_cod,me.getKey(entry_s_a_f_sec),me.getValue(entry_s_a_f_sec))
+        
+        #otras sumas    
     
         map_sub_sectores = me.getValue(mp.get(map,"sub_sector"))
         
@@ -507,15 +554,58 @@ def req_5(data_structs,anio):
     mayor_subsector=lt.newList("ARRAY_LIST")    
     lt.addLast(mayor_subsector,diccio_requ5(lt.getElement(actividades_subsector,1),map_subsector_mayor))
     return mayor_subsector,sub_arraylist
+   
     
+def lista_mayor_sector(registro,mapa_sector,cod_mayor_subsector,cod_menor_subsector):
+    lista=lt.newList("ARRAY_LIST")
+    lt.addLast(lista,{"Código sector económico":registro["Código sector económico"],
+                      "Nombre sector económico": registro["Nombre sector económico"],
+                      "Total ingresos netos del sector económico":me.getValue(mp.get(mapa_sector,"ingresos netos")),
+                      "Total costos y gastos del sector económico": me.getValue(mp.get(mapa_sector,"costos y gastos")),
+                      "Total saldo a pagar del sector económico": me.getValue(mp.get(mapa_sector,"saldo a pagar")),
+                      "Total saldo a favor del sector económico": me.getValue(mp.get(mapa_sector,"saldo a favor")),
+                      "Subsector económico que más aportó": cod_mayor_subsector,
+                      "Subsector económico que menos aportó":cod_menor_subsector
+                      })
+    return lista
 
-
-def req_6(data_structs):
+def req_6(data_structs,anio):
     """
     Función que soluciona el requerimiento 6
     """
-    # TODO: Realizar el requerimiento 6
-    pass
+    mapa=me.getValue(mp.get(data_structs["anios"],anio))
+    mapa_sectores=me.getValue(mp.get(mapa,"sector"))
+    mayor=0
+    
+    for cod_sector in lt.iterator(mp.keySet(mapa_sectores)):
+        sector=me.getValue(mp.get(mapa_sectores,cod_sector))
+        ingresos_netos=me.getValue(mp.get(sector,"ingresos netos"))
+        if ingresos_netos>mayor:
+            mayor=ingresos_netos
+            mayor_sector=sector
+    
+    subsectores_en_el_sector=me.getValue(mp.get(mayor_sector,"subsector en el sector"))
+    mapa_sub_sectores=me.getValue(mp.get(mapa,"sub_sector"))
+    mayor_sub=0
+    menor_sub=None
+    for cod_subsector in lt.iterator(subsectores_en_el_sector):
+        subsector=me.getValue(mp.get(mapa_sub_sectores,cod_subsector))
+        total_ingresos_netos=me.getValue(mp.get(subsector,"ingresos netos"))
+        if total_ingresos_netos>mayor_sub:
+            mayor_sub=total_ingresos_netos
+            cod_mayor_subsector=cod_subsector
+            subsector_mayor=subsector
+        if menor_sub==None or subsector<menor_sub:
+            menor_sub=total_ingresos_netos
+            subsector_menor=subsector
+            cod_menor_subsector=cod_subsector
+            
+    lista_sector = lista_mayor_sector(lt.getElement(me.getValue(mp.get(mayor_sector,"elements")),1),mayor_sector,cod_mayor_subsector,cod_menor_subsector)        
+    
+    #lista_subsector_mayor = 
+    
+    return lista_sector
+    
 
 
 def req_7(data_structs,anio,subsector,top):
