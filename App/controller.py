@@ -118,12 +118,11 @@ def get_map_anios(control):
     return control["model"]["anios"]
 
 
-def req_1(control):
+def req_1(control,anio,sector):
     """
     Retorna el resultado del requerimiento 1
     """
-    # TODO: Modificar el requerimiento 1
-    pass
+    return model.req_1(control["model"],anio,sector)
 
 
 def req_2(control):

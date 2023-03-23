@@ -439,13 +439,39 @@ def data_size(data_structs):
     """
     return data_structs["size"]
 
+#diccio req1
+def diccio_req1(data)-> dict:
+    diccio = {}
+    diccio["Código actividad económica"] = data["Código actividad económica"]
+    diccio["Nombre actividad económica"] = data["Nombre actividad económica"]
+    diccio["Código subsector económico"] = data["Código subsector económico"]
+    diccio["Nombre subsector económico"] = data["Nombre subsector económico"]
+    diccio["Total ingresos netos"] = data["Total ingresos netos"]
+    diccio["Total costos y gastos"] = data["Total costos y gastos"]
+    diccio["Total saldo a pagar"] = data["Total saldo a pagar"]
+    diccio["Total saldo a favor"] = data["Total saldo a favor"]
+    return diccio
+    
 
-def req_1(data_structs):
+def req_1(data_structs,anio,sector):
     """
     Función que soluciona el requerimiento 1
     """
     # TODO: Realizar el requerimiento 1
-    pass
+    #data_struct tiene llaves: anio y size
+    map_anios = data_structs["anios"]
+    map_anio = me.getValue(mp.get(map_anios,anio))
+    map_sectores = me.getValue(mp.get(map_anio,"sector"))
+    map_sector = me.getValue(mp.get(map_sectores,sector))
+    lst_sector = me.getValue(mp.get(map_sector,"elements"))
+    mayor_cmp = 0
+    mayor_dict = {}
+    for i in lt.iterator(lst_sector):
+        if int(i["Total saldo a pagar"]) > mayor_cmp:
+            mayor_cmp = int(i["Total saldo a pagar"])
+            mayor_dict = diccio_req1(i)
+    
+    return mayor_dict
 
 
 def req_2(data_structs):
@@ -494,7 +520,7 @@ def req_4(data_structs,anio):
             mayor = diccio["Costos y gastos nomina"]
             
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
-    merg.sort(lst,sort_req_4)
+    merg.sort(lst,cmp_req_4)
     dic_act = {"mas": [],"menos":[]}
 
     for i in range(1,4):
@@ -657,7 +683,7 @@ def req_7(data_structs,anio,subsector,top):
     lst = me.getValue(pareja)
     
     lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
-    sa.sort(lst,sort_req7)
+    sa.sort(lst,cmp_req7)
     for i in range(1,top+1):
         lt.addLast(lst_top,lt.getElement(lst,i))
     return lst_top        
@@ -691,8 +717,8 @@ def cmp_cod_actividad_economica(data1,data2):
     return int(data1["Código actividad económica"]) < int(data2["Código actividad económica"])
 
 
-def sort_req_4(data_1,data_2):
-    if data_1["Costos y gastos nómina"] > data_2["Costos y gastos nómina"]:
+def cmp_req_4(data_1,data_2):
+    if int(data_1["Costos y gastos nómina"]) > int(data_2["Costos y gastos nómina"]):
         return True
     else:
         return False
@@ -701,11 +727,11 @@ def cmp_req_5(data1,data2):
     return int(data1["Descuentos tributarios"]) < int(data2["Descuentos tributarios"])
 def cmp_req_6(data1,data2):
     return int(data1["Total ingresos netos"])<int(data2["Total ingresos netos"])
-def sort_req7(data1,data2):
-    if data1["Total costos y gastos"] < data2["Total costos y gastos"]:
+def cmp_req7(data1,data2):
+    if int(data1["Total costos y gastos"]) < int(data2["Total costos y gastos"]):
         return True
-    elif data1["Total costos y gastos"] == data2["Total costos y gastos"]:
-        if data1["Código actividad económica"] > data2["Código actividad económica"]:
+    elif int(data1["Total costos y gastos"]) == int(data2["Total costos y gastos"]):
+        if int(data1["Código actividad económica"]) > int(data2["Código actividad económica"]):
             return True
         return False
     else:

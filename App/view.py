@@ -97,12 +97,13 @@ def print_load_data(control):
             imprimir_tabla(sub_arraylist,headers)
    
 
-def print_req_1(control):
+def print_req_1(control,anio,sector):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    act = controller.req_1(control,anio,sector)
+    print(act)
+    #TODO falta tabular
 
 
 def print_req_2(control):
@@ -127,8 +128,8 @@ def print_req_4(control,anio):
     """
     req_4 = controller.req_4(control,anio)
     print(req_4[0])
-    print(len(req_4[1]["menos"]))
-    #falta mostrarlo bonito
+    print(req_4[1])
+    #TODO falta mostrarlo bonito
 
 def print_req_5(control,anio):
     """
@@ -164,6 +165,11 @@ def print_req_7(control,subsector,top,anio):
     # TODO: Imprimir el resultado del requerimiento 7
     lst_top = controller.req_7(control,anio,subsector,top)
     print(lst_top)
+    print("SXEDCRFTVGYBHUNJIM")
+    for i in lt.iterator(lst_top):
+        print("---------------------------------------")
+        print(i["Total costos y gastos"])
+        print(i["Código actividad económica"])
 
 
 def print_req_8(control):
@@ -294,7 +300,9 @@ if __name__ == "__main__":
                 print_load_data(control)
                 
             elif int(inputs) == 2:
-                print_req_1(control)
+                anio = input("anio en el cual desea mirar: ")
+                sector = input("ingrese el sector del cual desea revisar: ")
+                print_req_1(control,anio,sector)
 
             elif int(inputs) == 3:
                 print_req_2(control)
