@@ -129,10 +129,14 @@ def print_req_4(control,anio):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    req_4 = controller.req_4(control,anio)
-    print(req_4[0])
-    print(req_4[1])
-    #TODO falta mostrarlo bonito
+    diccio,lista_act = controller.req_4(control,anio)
+    lista=lt.newList("ARRAY_LIST")
+    lt.addLast(lista, diccio)
+    
+    imprimir_tabla(lista,diccio.keys())
+    
+    #TODO MODIFICAR HEADERS E IMPRIMIR LOS TÍTULOS DE LA TABLA
+    imprimir_tabla(lista_act,lt.getElement(lista_act,1).keys())
 
 def print_req_5(control,anio):
     """
@@ -165,14 +169,12 @@ def print_req_7(control,subsector,top,anio):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
+    
     lst_top = controller.req_7(control,anio,subsector,top)
-    print(lst_top)
-    print("SXEDCRFTVGYBHUNJIM")
-    for i in lt.iterator(lst_top):
-        print("---------------------------------------")
-        print(i["Total costos y gastos"])
-        print(i["Código actividad económica"])
+    #TODO COMPLETAR LOS HEADERS
+    headers=[]
+    
+    imprimir_tabla(lst_top,headers)
 
 
 def print_req_8(control):
@@ -303,8 +305,8 @@ if __name__ == "__main__":
                 print_load_data(control)
                 
             elif int(inputs) == 2:
-                anio = input("anio en el cual desea mirar: ")
-                sector = input("ingrese el sector del cual desea revisar: ")
+                anio = input("Año a consultar: ")
+                sector = input("Ingrese el sector del cual desea revisar: ")
                 print_req_1(control,anio,sector)
 
             elif int(inputs) == 3:
@@ -328,8 +330,8 @@ if __name__ == "__main__":
                 print_req_6(control,anio_req6)
 
             elif int(inputs) == 8:
-                anio = input("ingrese el año del cual desea ver el top de actividades economicas: ")
-                subsector = input("ingrese el subsector del cual desea ver el top de actividades economicas: ")
+                anio = input("Ingrese el año del cual desea ver el top de actividades economicas: ")
+                subsector = input("Ingrese el subsector del cual desea ver el top de actividades economicas: ")
                 top = int(input("Ingrese el top que desea ver: "))
                 print_req_7(control,subsector,top,anio)
 

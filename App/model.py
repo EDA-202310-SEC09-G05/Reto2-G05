@@ -526,13 +526,13 @@ def req_4(data_structs,anio):
             
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,cmp_req_4)
-    dic_act = {"mas": [],"menos":[]}
+    dic_act = lt.newList("ARRAY_LIST")
 
     for i in range(1,4):
-        dic_act["mas"].append(lt.getElement(lst,i))
+        lt.addLast(dic_act,lt.getElement(lst,i))
         #lt.addLast(dic_act["mas"], )
     for x in range(lt.size(lst)-2,lt.size(lst)+1):
-        dic_act["menos"].append(lt.getElement(lst,i))
+        lt.addLast(dic_act,lt.getElement(lst,i))
         #lt.addLast(dic_act["menos"],lt.getElement(lst,x))
         
     return diccio,dic_act #falta de dovelver la tupla con ambos dict
