@@ -574,9 +574,10 @@ def req_5(data_structs,anio):
     actividades_subsector=me.getValue(mp.get(map_subsector_mayor,"elements"))
     sort(actividades_subsector,"cmp_5")
     sub_arraylist=lt.newList("ARRAY_LIST")
-    if lt.size(actividades_subsector)<6:
+    if lt.size(actividades_subsector)<=6:
         sub_arraylist=actividades_subsector
     else:
+        print(actividades_subsector)
         for i in range(1,4):
             lt.addLast(sub_arraylist,lt.getElement(actividades_subsector,i))
         for i in range(2,-1,-1):
@@ -659,7 +660,7 @@ def req_6(data_structs,anio):
             mayor_sub=total_ingresos_netos
             cod_mayor_subsector=cod_subsector
             subsector_mayor=subsector
-        if menor_sub==None or subsector<menor_sub:
+        if menor_sub==None or total_ingresos_netos<menor_sub:
             menor_sub=total_ingresos_netos
             subsector_menor=subsector
             cod_menor_subsector=cod_subsector
