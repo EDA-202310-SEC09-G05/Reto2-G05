@@ -670,14 +670,22 @@ def req_6(data_structs,anio):
     lista_subsector_menor = lista_subsector(subsector_menor)
     return lista_sector,lista_subsector_mayor,lista_subsector_menor
     
-
+def diccio_req7(data):
+    diccio = {}
+    diccio["Código actividad económica"] = data["Código actividad económica"]
+    diccio["Nombre actividad económica"] = data["Nombre actividad económica"]
+    diccio["Código sector económico"] =  data["Código sector económico"]
+    diccio["Nombre sector económico"] = data["Nombre sector económico"]
+    diccio["Total ingresos netos consolidados para el periodo"] = data["Total ingresos netos"]
+    diccio["El total costos y gastos consolidados para el periodo"] = data["Total costos y gastos"]
+    diccio["Total saldo por pagar consolidados para el periodo"] = data["Total saldo a pagar"]
+    diccio["Total saldo a favor consolidados para el periodo"] = data["Total saldo a favor"]
+    return diccio
 
 def req_7(data_structs,anio,subsector,top):
     """
     Función que soluciona el requerimiento 7
     """
-    
-
     año = mp.get(data_structs["anios"],anio)
     map_anio = me.getValue(año)
     sub = mp.get(map_anio,"sub_sector")
@@ -690,7 +698,7 @@ def req_7(data_structs,anio,subsector,top):
     lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
     sa.sort(lst,cmp_req7)
     for i in range(1,top+1):
-        lt.addLast(lst_top,lt.getElement(lst,i))
+        lt.addLast(lst_top,diccio_req7(lt.getElement(lst,i)))
     return lst_top        
 
 def req_8(data_structs):

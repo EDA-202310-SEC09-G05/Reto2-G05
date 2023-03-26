@@ -179,8 +179,9 @@ def print_req_7(control,subsector,top,anio):
     """
     
     lst_top = controller.req_7(control,anio,subsector,top)
+
     #TODO COMPLETAR LOS HEADERS
-    headers=[]
+    headers= lt.firstElement(lst_top).keys()
     
     imprimir_tabla(lst_top,headers)
 
