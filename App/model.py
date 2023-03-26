@@ -530,13 +530,12 @@ def req_4(data_structs,anio):
 
     for i in range(1,4):
         lt.addLast(dic_act,lt.getElement(lst,i))
-        #lt.addLast(dic_act["mas"], )
+
     for x in range(lt.size(lst)-2,lt.size(lst)+1):
         lt.addLast(dic_act,lt.getElement(lst,i))
-        #lt.addLast(dic_act["menos"],lt.getElement(lst,x))
-        
-    return diccio,dic_act #falta de dovelver la tupla con ambos dict
 
+        
+    return diccio,dic_act 
 
 def diccio_requ5(registro,mapa_subsector):
     return{
