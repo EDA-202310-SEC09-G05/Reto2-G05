@@ -129,7 +129,16 @@ def req_2(control,anio,cod_sector):
     """
     Retorna el resultado del requerimiento 2
     """
-    return model.req_2(control["model"],anio,cod_sector)
+    # toma el tiempo al inicio del proceso
+    start_time = getTime()
+    
+    respuesta = model.req_2(control["model"],anio,cod_sector)
+    
+    stop_time = getTime()
+    # calculando la diferencia en tiempo
+    delta_time = deltaTime(stop_time, start_time)
+    
+    return respuesta,delta_time
 
 
 def req_3(control):
@@ -152,13 +161,32 @@ def req_5(control,anio):
     """
     Retorna el resultado del requerimiento 5
     """
-    return model.req_5(control["model"],anio)
+    # toma el tiempo al inicio del proceso
+    start_time = getTime()
+    
+    mayor_subsector,arraylist = model.req_5(control["model"],anio)
+    
+    
+    stop_time = getTime()
+    # calculando la diferencia en tiempo
+    delta_time = deltaTime(stop_time, start_time)
+    
+    return mayor_subsector,arraylist,delta_time
 
 def req_6(control,anio):
     """
     Retorna el resultado del requerimiento 6
     """
-    return model.req_6(control["model"],anio)
+    # toma el tiempo al inicio del proceso
+    start_time = getTime()
+    
+    lista_sector,mayor_subsector,menor_subsector = model.req_6(control["model"],anio)
+    
+    stop_time = getTime()
+    # calculando la diferencia en tiempo
+    delta_time = deltaTime(stop_time, start_time)
+    
+    return lista_sector,mayor_subsector,menor_subsector,delta_time
 
 
 def req_7(control,anio,subsector,top):

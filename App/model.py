@@ -417,7 +417,7 @@ def add(data_structs,data,tipo_mapa,factor_carga):
             
             #pareja (llave,valor) descuentos tributarios
             entry_dt = me.newMapEntry("Descuentos tributarios",int(data["Descuentos tributarios"]))
-            mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_sf))
+            mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
             #/pareja (llave,valor) descuentos tributarios
         
             #------------- parte de la suma --------------#

@@ -112,10 +112,12 @@ def print_req_2(control,anio,cod_sector):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     lista=lt.newList("ARRAY_LIST")
-    respuesta= controller.req_2(control,anio,cod_sector)
+    respuesta,delta_time = controller.req_2(control,anio,cod_sector)
     lt.addLast(lista,respuesta)
     imprimir_tabla(lista,["Código actividad económica","Nombre actividad económica","Código subsector económico","Nombre subsector económico","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
-
+    
+    #Tiempo
+    print("El tiempo que tomó ejecutar este requerimiento fue "+ f"{delta_time:.3f}" +" ms.")
 
 def print_req_3(control):
     """
@@ -142,7 +144,7 @@ def print_req_5(control,anio):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    mayor_subsector,arraylist=controller.req_5(control,anio)
+    mayor_subsector,arraylist,delta_time=controller.req_5(control,anio)
     
     print("Subsector económico con los mayores Descuentos tributarios en "+str(anio))
     imprimir_tabla(mayor_subsector,lt.getElement(mayor_subsector,1).keys())
@@ -150,11 +152,14 @@ def print_req_5(control,anio):
     print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(lt.getElement(mayor_subsector,1)["Código subsector económico"])+" son:")
     imprimir_tabla(arraylist,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 
+    #Tiempo
+    print("El tiempo que tomó ejecutar este requerimiento fue "+ f"{delta_time:.3f}" +" ms.")
+    
 def print_req_6(control,anio):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    lista_sector,mayor_subsector,menor_subsector = controller.req_6(control,anio)
+    lista_sector,mayor_subsector,menor_subsector,delta_time = controller.req_6(control,anio)
     print("El sector económico con mayores ingresos netos en el año "+ str(anio) +" es:")
     imprimir_tabla(lista_sector,lt.getElement(lista_sector,1).keys())
     
@@ -163,6 +168,9 @@ def print_req_6(control,anio):
     
     print("El subsector que menos contribuyó es:")
     imprimir_tabla(menor_subsector,lt.getElement(menor_subsector,1).keys(),25,30)
+    
+    #Tiempo
+    print("El tiempo que tomó ejecutar este requerimiento fue "+ f"{delta_time:.3f}" +" ms.")
 
 
 def print_req_7(control,subsector,top,anio):
@@ -260,7 +268,7 @@ def printLoadDataAnswer(answer):
     else:
         print("Tiempo [ms]: ", f"{answer:.3f}")
 #imprimir tablas
-def imprimir_tabla(lista,headers,maxcolwidths=9,maxheadercolwidths=9):
+def imprimir_tabla(lista,headers,maxcolwidths=15,maxheadercolwidths=15):
     
     datos=[]
     for dato in lt.iterator(lista):
@@ -277,7 +285,7 @@ def imprimir_tabla(lista,headers,maxcolwidths=9,maxheadercolwidths=9):
                 fila.append(dato[header])
         datos.append(fila)
 
-    print(tabulate(datos, headers, tablefmt='grid', maxcolwidths=maxcolwidths, maxheadercolwidths=maxheadercolwidths))
+    print(tabulate(datos, headers, tablefmt='grid', maxcolwidths=maxcolwidths, maxheadercolwidths=maxheadercolwidths,stralign='center'))
     
 
 # main del reto
