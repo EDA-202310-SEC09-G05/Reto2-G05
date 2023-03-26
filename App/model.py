@@ -577,7 +577,6 @@ def req_5(data_structs,anio):
     if lt.size(actividades_subsector)<=6:
         sub_arraylist=actividades_subsector
     else:
-        print(actividades_subsector)
         for i in range(1,4):
             lt.addLast(sub_arraylist,lt.getElement(actividades_subsector,i))
         for i in range(2,-1,-1):
