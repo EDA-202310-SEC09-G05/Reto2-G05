@@ -499,11 +499,13 @@ def req_4(data_structs,anio):
     """
     Función que soluciona el requerimiento 4
     """
+    
     map_year = me.getValue(mp.get(data_structs["anios"],anio))
     
     map_sub_sector = me.getValue(mp.get(map_year,"sub_sector"))
     mayor = 0
     diccio = {}
+
     for sub in lt.iterator(mp.keySet(map_sub_sector)):
         map_por_sub = me.getValue(mp.get(map_sub_sector,sub))
 
@@ -523,7 +525,7 @@ def req_4(data_structs,anio):
             diccio["codigo subsector"] =  actividad["Código subsector económico"]
             
             mayor = diccio["Costos y gastos nomina"]
-            
+    
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,cmp_req_4)
     dic_act = lt.newList("ARRAY_LIST")
@@ -532,7 +534,7 @@ def req_4(data_structs,anio):
         lt.addLast(dic_act,lt.getElement(lst,i))
 
     for x in range(lt.size(lst)-2,lt.size(lst)+1):
-        lt.addLast(dic_act,lt.getElement(lst,i))
+        lt.addLast(dic_act,lt.getElement(lst,x))
 
         
     return diccio,dic_act 

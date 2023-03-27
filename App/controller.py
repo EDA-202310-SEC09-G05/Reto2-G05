@@ -153,6 +153,7 @@ def req_4(control,anio):
     """
     Retorna el resultado del requerimiento 4
     """
+    time
     tupla = model.req_4(control["model"],anio)
     return tupla
 
