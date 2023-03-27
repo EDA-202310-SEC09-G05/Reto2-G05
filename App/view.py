@@ -140,7 +140,8 @@ def print_req_4(control,anio):
     imprimir_tabla(lista,diccio.keys())
     
     #TODO MODIFICAR HEADERS E IMPRIMIR LOS TÍTULOS DE LA TABLA
-    imprimir_tabla(lista_act,lt.getElement(lista_act,1).keys())
+    print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(lt.getElement(diccio,1)["Código subsector económico"])+" son:")
+    imprimir_tabla(lista_act,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 
 def print_req_5(control,anio):
     """
