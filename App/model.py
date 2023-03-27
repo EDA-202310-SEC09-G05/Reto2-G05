@@ -696,8 +696,11 @@ def req_7(data_structs,anio,subsector,top):
     
     lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
     sa.sort(lst,cmp_req7)
-    for i in range(1,top+1):
-        lt.addLast(lst_top,diccio_req7(lt.getElement(lst,i)))
+    if lt.size(lst_top) < top:
+        lst_top = lst
+    else:
+        for i in range(1,top+1):
+            lt.addLast(lst_top,diccio_req7(lt.getElement(lst,i)))
     return lst_top        
 
 def req_8(data_structs):
