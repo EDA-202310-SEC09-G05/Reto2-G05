@@ -269,7 +269,7 @@ def printLoadDataAnswer(answer):
     else:
         print("Tiempo [ms]: ", f"{answer:.3f}")
 #imprimir tablas
-def imprimir_tabla(lista,headers,maxcolwidths=15,maxheadercolwidths=15):
+def imprimir_tabla(lista,headers,maxcolwidths=12,maxheadercolwidths=12):
     
     datos=[]
     for dato in lt.iterator(lista):
