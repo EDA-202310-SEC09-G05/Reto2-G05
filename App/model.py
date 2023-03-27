@@ -529,12 +529,14 @@ def req_4(data_structs,anio):
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,cmp_req_4)
     dic_act = lt.newList("ARRAY_LIST")
+    if lt.size(lst)> 6:
+        for i in range(1,4):
+            lt.addLast(dic_act,lt.getElement(lst,i))
 
-    for i in range(1,4):
-        lt.addLast(dic_act,lt.getElement(lst,i))
-
-    for x in range(lt.size(lst)-2,lt.size(lst)+1):
-        lt.addLast(dic_act,lt.getElement(lst,x))
+        for x in range(lt.size(lst)-2,lt.size(lst)+1):
+            lt.addLast(dic_act,lt.getElement(lst,x))
+    else:
+        dic_act = lst
 
         
     return diccio,dic_act 
