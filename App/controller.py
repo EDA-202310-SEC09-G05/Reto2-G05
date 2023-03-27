@@ -153,9 +153,11 @@ def req_4(control,anio):
     """
     Retorna el resultado del requerimiento 4
     """
-    time
+    start_time = getTime()
     tupla = model.req_4(control["model"],anio)
-    return tupla
+    stop_time = getTime()
+    delta_time = deltaTime(stop_time, start_time)
+    return tupla,delta_time
 
 
 def req_5(control,anio):

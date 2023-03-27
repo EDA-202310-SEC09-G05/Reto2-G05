@@ -131,10 +131,12 @@ def print_req_4(control,anio):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    diccio,lista_act = controller.req_4(control,anio)
+    dic,time = controller.req_4(control,anio)
+    diccio,lista_act = dic
     lista=lt.newList("ARRAY_LIST")
     lt.addLast(lista, diccio)
-    
+    print("El tiempo es ",time)
+    print("--------------------------------------------------")
     imprimir_tabla(lista,diccio.keys())
     
     #TODO MODIFICAR HEADERS E IMPRIMIR LOS TÍTULOS DE LA TABLA
