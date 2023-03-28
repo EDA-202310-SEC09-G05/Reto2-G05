@@ -207,8 +207,12 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
         
         #pareja llave valor descuentos tributarios
         entry_dt = me.newMapEntry("Descuentos tributarios",0)
-        mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_sf))
+        mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
         #pareja llave valor descuentos tributarios
+        
+        #Req---8-----
+
+        #Req---8-----
         
         #------------- parte de la suma --------------#
 def add(data_structs,data,tipo_mapa,factor_carga):
@@ -707,12 +711,15 @@ def req_7(data_structs,anio,subsector,top):
             lt.addLast(lst_top,diccio_req7(lt.getElement(lst,i)))
     return lst_top        
 
-def req_8(data_structs):
+def req_8(data_structs,top,anio):
     """
     Función que soluciona el requerimiento 8
     """
-    # TODO: Realizar el requerimiento 8
+    mapa=me.getValue(mp.get(data_structs["anios"],anio))
+    mapa_sub_sectores=me.getValue(mp.get(mapa,"sub_sector"))
+    
     pass
+    
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
