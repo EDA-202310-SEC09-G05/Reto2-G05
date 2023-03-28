@@ -145,13 +145,6 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
         #pareja (llave, valor) de costos y gastos nomina #
         entry_cyg_n = me.newMapEntry("Costos y gastos nomina",0)
         mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
-        
-        """
-        cyg_n = me.getValue(mp.get(map_sub_sector_cod,me.getKey(entry_cyg_n)))
-        cyg_n += int(data["Costos y gastos nómina"])
-        entry_cyg_n = me.newMapEntry("Costos y gastos nomina",cyg_n)
-        mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
-        """
         #/pareja llave, valor de costos y gastos nomina #
         
         #pareja llave valor retenciones  sub#
@@ -160,49 +153,23 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
         #/pareja llave valor retenciones  sub#
         
         #pareja llave valor ingresos netos sub_sector#
-        
         entry_ingresos_netos = me.newMapEntry("ingresos netos",0) #crea una pareja llave valor (ingresos netos, total ingresos netos del sub_sector)
         mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # añade la pareja llave valor al mapa 
-        """
-        i_n = me.getValue(mp.get(map_sub_sector_cod,"ingresos netos")) #obtenemos el valor de la pareja llave valor (ingresos netos, total ingresos netos), el cual seran los actuales ingresos netos del subsector
-        i_n += int(data["Total ingresos netos"]) # a los ingresos netos actuales le suumamos los de la nueva actividad economica
-        entry_ingresos_netos = me.newMapEntry("ingresos netos",i_n) # creamos otra vez una pareja llave valor la cual tendra como lalve la misma de arriba y como valor los nuevos ingresos netod del subsector
-        mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # ponemos esta nueva pareja llave valor en el mapa
-        """
         #/pareja llave valor ingresos netos sub_sector#
         
         #pareja llave valor costos y gastos sub_sector#
         entry_cyg = me.newMapEntry("costos y gastos",0)
         mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))
-        """
-        cyg = me.getValue(mp.get(map_sub_sector_cod,"costos y gastos"))
-        cyg += int(data["Total costos y gastos"])
-        entry_cyg = me.newMapEntry("costos y gastos",cyg)
-        mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))        
-        """
         #/pareja llave valor costos y gastos sub_sector#
         
         #pareja llave valor saldo a pagar sub_sector#
         entry_sp = me.newMapEntry("saldo a pagar",0)
         mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
-        """
-        sp =me.getValue(mp.get(map_sub_sector_cod,"saldo a pagar"))
-        sp += int(data["Total saldo a pagar"])
-        entry_sp = me.newMapEntry("saldo a pagar",sp)
-        mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
-        """
-        #/pareja llave valor saldo a pagar sub_sector#
+        #pareja llave valor saldo a pagar sub_sector#
         
         #pareja llave valor saldo a favor
         entry_sf = me.newMapEntry("saldo a favor",0)
         mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))
-        """
-        sf = me.getValue(mp.get(map_sub_sector_cod,"saldo a favor"))
-        sf += int(data["Total saldo a favor"])
-        entry_sf = me.newMapEntry("saldo a favor",sf)
-        mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))
-        """
-        
         #/ pareja llave valor saldo a favor
         
         #pareja llave valor descuentos tributarios
@@ -211,10 +178,12 @@ def create_base(data_structs,data,tipo_mapa,factor_carga):
         #pareja llave valor descuentos tributarios
         
         #Req---8-----
-
+        entry_ic = me.newMapEntry("Total impuesto a cargo",0)
+        mp.put(map_sub_sector_cod,me.getKey(entry_ic),me.getValue(entry_ic))
         #Req---8-----
         
         #------------- parte de la suma --------------#
+        
 def add(data_structs,data,tipo_mapa,factor_carga):
         map =  me.getValue(mp.get(data_structs["anios"],data["Año"]))
         lst = me.getValue(mp.get(map,"elements"))
@@ -282,75 +251,11 @@ def add(data_structs,data,tipo_mapa,factor_carga):
         entry_s_a_f_sec=me.newMapEntry("saldo a favor",suma_saldo_a_favor_sector)
         mp.put(map_sector_cod,me.getKey(entry_s_a_f_sec),me.getValue(entry_s_a_f_sec))
         
-        #otras sumas    
+    #---------------------------------SUBSECTORES------------------------------------------------------   
     
         map_sub_sectores = me.getValue(mp.get(map,"sub_sector"))
         
-        if mp.contains(map_sub_sectores,data["Código subsector económico"]):
-            
-            map_sub_sector_cod = me.getValue(mp.get(map_sub_sectores,data["Código subsector económico"]))
-            lst = me.getValue(mp.get(map_sub_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
-            lt.addLast(lst,data) # añadimos el nuevo elemento a esta lista
-            
-            #----------------------  parte de la suma ----------------#
-        
-        
-        
-            #pareja llave, valor de costos y gastos nomina #
-            cyg_n = me.getValue(mp.get(map_sub_sector_cod,"Costos y gastos nomina"))
-            cyg_n += int(data["Costos y gastos nómina"])
-            entry_cyg_n = me.newMapEntry("Costos y gastos nomina",cyg_n)
-            mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
-            #pareja llave, valor de costos y gastos nomina #
-        
-            #pareja llave valor retenciones  sub#
-            
-            #TODO
-            
-            #/pareja llave valor retenciones  sub#
-        
-            #pareja llave valor ingresos netos sub_sector#
-            i_n = me.getValue(mp.get(map_sub_sector_cod,"ingresos netos")) #obtenemos el valor de la pareja llave valor (ingresos netos, total ingresos netos), el cual seran los actuales ingresos netos del subsector
-            i_n += int(data["Total ingresos netos"]) # a los ingresos netos actuales le suumamos los de la nueva actividad economica
-            entry_ingresos_netos = me.newMapEntry("ingresos netos",i_n) # creamos otra vez una pareja llave valor la cual tendra como lalve la misma de arriba y como valor los nuevos ingresos netod del subsector
-            mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # ponemos esta nueva pareja llave valor en el mapa
-                
-            #/pareja llave valor ingresos netos sub_sector#
-        
-            #pareja llave valor costos y gastos sub_sector#
-            cyg = me.getValue(mp.get(map_sub_sector_cod,"costos y gastos"))
-            cyg += int(data["Total costos y gastos"])
-            entry_cyg = me.newMapEntry("costos y gastos",cyg)
-            mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))        
-        
-            #/pareja llave valor costos y gastos sub_sector#
-        
-            #pareja llave valor saldo a pagar sub_sector#
-            sp =me.getValue(mp.get(map_sub_sector_cod,"saldo a pagar"))
-            sp += int(data["Total saldo a pagar"])
-            entry_sp = me.newMapEntry("saldo a pagar",sp)
-            mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
-        
-            #/pareja llave valor saldo a pagar sub_sector#
-        
-            #pareja llave valor saldo a favor
-            sf = me.getValue(mp.get(map_sub_sector_cod,"saldo a favor"))
-            sf += int(data["Total saldo a favor"])
-            entry_sf = me.newMapEntry("saldo a favor",sf)
-            mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))
-        
-            #/ pareja llave valor saldo a favor
-            #pareja (llave,valor) Total descuentos tributarios
-            
-            dt = me.getValue(mp.get(map_sub_sector_cod,"Descuentos tributarios"))
-            dt += int(data["Descuentos tributarios"])
-            entry_dt = me.newMapEntry("Descuentos tributarios",dt)
-            mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
-            #/pareja (llave,valor) Total descuentos tributarios
-        
-            #------------- parte de la suma --------------#
-
-        else:
+        if not(mp.contains(map_sub_sectores,data["Código subsector económico"])):
             entry = me.newMapEntry(data["Código subsector económico"],mp.newMap(numelements=8,maptype = tipo_mapa,
                                               loadfactor= factor_carga,
                                               cmpfunction=None)) # Creamos la pareja llave valor de (cod_sub_sector,map_sector)
@@ -365,66 +270,93 @@ def add(data_structs,data,tipo_mapa,factor_carga):
             
             lt.addLast(me.getValue(mp.get(map_sub_sector_cod,me.getKey(lst))),data) #añadimos a la lista este nuevo elemento
             
+            #----------------------Crear sumas-------------------------------
             
-            #----------------------  parte de la suma ----------------#
-            
-            #pareja (llave, valor) de costos y gastos nomina #
             entry_cyg_n = me.newMapEntry("Costos y gastos nomina",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
-            cyg_n = me.getValue(mp.get(map_sub_sector_cod,me.getKey(entry_cyg_n)))
-            cyg_n += int(data["Costos y gastos nómina"])
-            entry_cyg_n = me.newMapEntry("Costos y gastos nomina",cyg_n)
-            mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
-            #pareja llave, valor de costos y gastos nomina #
-        
-            #pareja llave valor retenciones  sub#
+            
             entry_retenciones = me.newMapEntry("retenciones",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_retenciones),me.getValue(entry_retenciones))
-            # TODO completar suma
-            #/pareja llave valor retenciones  sub#
-        
-            #pareja llave valor ingresos netos sub_sector#
+            
             entry_ingresos_netos = me.newMapEntry("ingresos netos",0) #crea una pareja llave valor (ingresos netos, total ingresos netos del sub_sector)
             mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # añade la pareja llave valor al mapa 
-            i_n = me.getValue(mp.get(map_sub_sector_cod,"ingresos netos")) #obtenemos el valor de la pareja llave valor (ingresos netos, total ingresos netos), el cual seran los actuales ingresos netos del subsector
-            i_n += int(data["Total ingresos netos"]) # a los ingresos netos actuales le suumamos los de la nueva actividad economica
-            entry_ingresos_netos = me.newMapEntry("ingresos netos",i_n) # creamos otra vez una pareja llave valor la cual tendra como lalve la misma de arriba y como valor los nuevos ingresos netod del subsector
-            mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # ponemos esta nueva pareja llave valor en el mapa  
-            #/pareja llave valor ingresos netos sub_sector#
-        
-            #pareja llave valor costos y gastos sub_sector#
+            
             entry_cyg = me.newMapEntry("costos y gastos",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))
-            cyg = me.getValue(mp.get(map_sub_sector_cod,"costos y gastos"))
-            cyg += int(data["Total costos y gastos"])
-            entry_cyg = me.newMapEntry("costos y gastos",cyg)
-            mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))        
-            #/pareja llave valor costos y gastos sub_sector#
-        
-            #pareja llave valor saldo a pagar sub_sector#
+            
             entry_sp = me.newMapEntry("saldo a pagar",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
-            sp =me.getValue(mp.get(map_sub_sector_cod,"saldo a pagar"))
-            sp += int(data["Total saldo a pagar"])
-            entry_sp = me.newMapEntry("saldo a pagar",sp)
-            mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
-            #/pareja llave valor saldo a pagar sub_sector#
-        
-            #pareja llave valor saldo a favor
+            
             entry_sf = me.newMapEntry("saldo a favor",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))
-            sf = me.getValue(mp.get(map_sub_sector_cod,"saldo a favor"))
-            sf += int(data["Total saldo a favor"])
-            entry_sf = me.newMapEntry("saldo a favor",sf)
-            mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))        
-            #/ pareja llave valor saldo a favor
             
-            #pareja (llave,valor) descuentos tributarios
-            entry_dt = me.newMapEntry("Descuentos tributarios",int(data["Descuentos tributarios"]))
+            entry_dt = me.newMapEntry("Descuentos tributarios",0)
             mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
-            #/pareja (llave,valor) descuentos tributarios
+            
+            
+            
+            
+            
+        map_sub_sector_cod = me.getValue(mp.get(map_sub_sectores,data["Código subsector económico"]))
+        lst = me.getValue(mp.get(map_sub_sector_cod,"elements")) # obtenemos la lista de elementos que pertenecen al codigo de sector economico actual
+        lt.addLast(lst,data) # añadimos el nuevo elemento a esta lista
+            
+        #----------------------  parte de la suma ----------------#
         
-            #------------- parte de la suma --------------#
+        
+        
+        #pareja llave, valor de costos y gastos nomina #
+        cyg_n = me.getValue(mp.get(map_sub_sector_cod,"Costos y gastos nomina"))
+        cyg_n += int(data["Costos y gastos nómina"])
+        entry_cyg_n = me.newMapEntry("Costos y gastos nomina",cyg_n)
+        mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
+        #pareja llave, valor de costos y gastos nomina #
+        
+        #pareja llave valor retenciones  sub#
+            
+        #TODO REQ-3
+            
+        #/pareja llave valor retenciones  sub#
+        
+        #pareja llave valor ingresos netos sub_sector#
+        i_n = me.getValue(mp.get(map_sub_sector_cod,"ingresos netos")) #obtenemos el valor de la pareja llave valor (ingresos netos, total ingresos netos), el cual seran los actuales ingresos netos del subsector
+        i_n += int(data["Total ingresos netos"]) # a los ingresos netos actuales le suumamos los de la nueva actividad economica
+        entry_ingresos_netos = me.newMapEntry("ingresos netos",i_n) # creamos otra vez una pareja llave valor la cual tendra como lalve la misma de arriba y como valor los nuevos ingresos netod del subsector
+        mp.put(map_sub_sector_cod,me.getKey(entry_ingresos_netos),me.getValue(entry_ingresos_netos)) # ponemos esta nueva pareja llave valor en el mapa
+                
+        #/pareja llave valor ingresos netos sub_sector#
+        
+        #pareja llave valor costos y gastos sub_sector#
+        cyg = me.getValue(mp.get(map_sub_sector_cod,"costos y gastos"))
+        cyg += int(data["Total costos y gastos"])
+        entry_cyg = me.newMapEntry("costos y gastos",cyg)
+        mp.put(map_sub_sector_cod,me.getKey(entry_cyg),me.getValue(entry_cyg))        
+        #/pareja llave valor costos y gastos sub_sector#
+        
+        #pareja llave valor saldo a pagar sub_sector#
+        sp =me.getValue(mp.get(map_sub_sector_cod,"saldo a pagar"))
+        sp += int(data["Total saldo a pagar"])
+        entry_sp = me.newMapEntry("saldo a pagar",sp)
+        mp.put(map_sub_sector_cod,me.getKey(entry_sp),me.getValue(entry_sp))
+        #/pareja llave valor saldo a pagar sub_sector#
+        
+        #pareja llave valor saldo a favor
+        sf = me.getValue(mp.get(map_sub_sector_cod,"saldo a favor"))
+        sf += int(data["Total saldo a favor"])
+        entry_sf = me.newMapEntry("saldo a favor",sf)
+        mp.put(map_sub_sector_cod,me.getKey(entry_sf),me.getValue(entry_sf))
+        #/ pareja llave valor saldo a favor
+        
+        #pareja (llave,valor) Total descuentos tributarios
+            
+        dt = me.getValue(mp.get(map_sub_sector_cod,"Descuentos tributarios"))
+        dt += int(data["Descuentos tributarios"])
+        entry_dt = me.newMapEntry("Descuentos tributarios",dt)
+        mp.put(map_sub_sector_cod,me.getKey(entry_dt),me.getValue(entry_dt))
+        #/pareja (llave,valor) Total descuentos tributarios
+        
+        #------------- parte de la suma --------------#
+
     
 def add_data(data_structs,data,tipo_mapa,factor_carga):
     
