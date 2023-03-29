@@ -135,14 +135,17 @@ def print_req_4(control,anio):
     diccio,lista_act = dic
     lista=lt.newList("ARRAY_LIST")
     lt.addLast(lista, diccio)
-    print("El tiempo es ",time)
-    print("--------------------------------------------------")
-    imprimir_tabla(lista,diccio.keys())
     
+    print("El tiempo es ",time)
+    print("el subsector economico con el menor costos y gastos nómina en el año "+anio)
+    imprimir_tabla(lista,diccio.keys())
+    tamanio = lt.size(lista_act)
+    new_lst = lt.newList(datastructure="ARRAY_LIST")
+    for i in range(1,tamanio):
+        lt.addLast(new_lst,lt.getElement(lista_act,i))
     #TODO MODIFICAR HEADERS E IMPRIMIR LOS TÍTULOS DE LA TABLA
-    #print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(diccio["codigo subsector"])+" son:")
-    #imprimir_tabla(lista_act,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
-
+    print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(diccio["codigo subsector"])+" son:")
+    imprimir_tabla(new_lst,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 def print_req_5(control,anio):
     """
         Función que imprime la solución del Requerimiento 5 en consola
