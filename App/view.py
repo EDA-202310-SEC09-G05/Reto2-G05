@@ -102,10 +102,12 @@ def print_req_1(control,anio,sector):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     lista=lt.newList("ARRAY_LIST")
-    act = controller.req_1(control,anio,sector)
+    act,time = controller.req_1(control,anio,sector)
     lt.addLast(lista,act)
+    
     imprimir_tabla(lista,act.keys())
-
+    print(" ")
+    print("el tiempo es:"+str(time))
 
 def print_req_2(control,anio,cod_sector):
     """

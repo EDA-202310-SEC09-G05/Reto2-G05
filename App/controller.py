@@ -122,9 +122,13 @@ def req_1(control,anio,sector):
     """
     Retorna el resultado del requerimiento 1
     """
-    return model.req_1(control["model"],anio,sector)
+    start_time = getTime()
+    rtn = model.req_1(control["model"],anio,sector)
 
-
+    stop_time = getTime()
+    # calculando la diferencia en tiempo
+    delta_time = deltaTime(stop_time, start_time)
+    return rtn,delta_time
 def req_2(control,anio,cod_sector):
     """
     Retorna el resultado del requerimiento 2
