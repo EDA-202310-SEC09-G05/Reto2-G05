@@ -471,6 +471,7 @@ def req_4(data_structs,anio):
 
         for x in range(lt.size(lst)-2,lt.size(lst)+1):
             lt.addLast(dic_act,lt.getElement(lst,x))
+            
     else:
         dic_act = lst
 

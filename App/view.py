@@ -141,8 +141,12 @@ def print_req_4(control,anio):
     imprimir_tabla(lista,diccio.keys())
     tamanio = lt.size(lista_act)
     new_lst = lt.newList(datastructure="ARRAY_LIST")
-    for i in range(1,tamanio):
-        lt.addLast(new_lst,lt.getElement(lista_act,i))
+    if lt.getElement(lista_act,tamanio) == lt.getElement(lista_act,tamanio-1):
+        for i in range(1,tamanio):
+            lt.addLast(new_lst,lt.getElement(lista_act,i))
+    else:
+        new_lst = lista_act
+    
     #TODO MODIFICAR HEADERS E IMPRIMIR LOS TÍTULOS DE LA TABLA
     print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(diccio["codigo subsector"])+" son:")
     imprimir_tabla(new_lst,["Código actividad económica","Nombre actividad económica","Descuentos tributarios","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
