@@ -268,8 +268,6 @@ def add(data_structs,data,tipo_mapa,factor_carga):
                                                                   compare))
             mp.put(map_sub_sector_cod,me.getKey(lst),me.getValue(lst)) #ponemos la lista en el el el mapa de su respectivo sector
             
-            lt.addLast(me.getValue(mp.get(map_sub_sector_cod,me.getKey(lst))),data) #añadimos a la lista este nuevo elemento
-            
             #----------------------Crear sumas-------------------------------
             
             entry_cyg_n = me.newMapEntry("Costos y gastos nomina",0)
