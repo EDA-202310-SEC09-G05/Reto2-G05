@@ -196,7 +196,12 @@ def req_7(control,anio,subsector,top):
     """
     Retorna el resultado del requerimiento 7
     """
-    return model.req_7(control["model"],anio,subsector,top)
+    start_time = getTime()
+    
+    lst =  model.req_7(control["model"],anio,subsector,top)
+    stop_time = getTime()
+    deltaTime = stop_time-start_time
+    return lst,deltaTime
 
 
 def req_8(control):

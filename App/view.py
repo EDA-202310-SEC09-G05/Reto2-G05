@@ -188,8 +188,8 @@ def print_req_7(control,subsector,top,anio):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     
-    lst_top = controller.req_7(control,anio,subsector,top)
-
+    lst_top,time = controller.req_7(control,anio,subsector,top)
+    print("el tiempo que se demoró el requerimiento es " + str(time))
     #TODO COMPLETAR LOS HEADERS
     headers= ["Código actividad económica","Nombre actividad económica","Código sector económico","Nombre sector económico","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"]
     
