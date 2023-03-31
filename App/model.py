@@ -635,7 +635,8 @@ def req_7(data_structs,anio,subsector,top):
     
     lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
     sa.sort(lst,cmp_req7)
-    if lt.size(lst_top) < top:
+    print(lt.size(lst))
+    if lt.size(lst) < top:
         lst_top = lst
     else:
         for i in range(1,top+1):

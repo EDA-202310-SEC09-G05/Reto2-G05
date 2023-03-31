@@ -185,8 +185,8 @@ def print_req_7(control,subsector,top,anio):
     lst_top,time = controller.req_7(control,anio,subsector,top)
     print("el tiempo que se demoró el requerimiento es " + str(time))
     #TODO COMPLETAR LOS HEADERS
-    headers= ["Código actividad económica","Nombre actividad económica","Código sector económico","Nombre sector económico","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"]
-    
+    headers = lt.firstElement(lst_top).keys()
+    print("el top "+str(top) + "actividades economicas para el año "+str(anio)+" en el subsector " + str(subsector) +" son:")
     imprimir_tabla(lst_top,headers)
 
 
