@@ -136,7 +136,9 @@ def print_req_3(control,anio):
     imprimir_tabla(lista,diccio.keys())
 
     print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(diccio["codigo subsector"])+" son:")
-    imprimir_tabla(lista_act,["Código actividad económica","Nombre actividad económica","Retenciones","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
+    #headers = lt.firstElement(lista_act).keys()
+    headers = ["Código actividad económica","Nombre actividad económica","Total retenciones","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"]
+    imprimir_tabla(lista_act,headers)
 
 
 def print_req_4(control,anio):

@@ -438,10 +438,10 @@ def req_3(data_structs,anio):
     for sub in lt.iterator(mp.keySet(map_sub_sector)):
         map_por_sub = me.getValue(mp.get(map_sub_sector,sub))
 
-        c_y_g = me.getValue(mp.get(map_por_sub,"Total retenciones"))
+        c_y_g = me.getValue(mp.get(map_por_sub,"retenciones"))
         
-        if  c_y_g < menor:
-            diccio["Total retenciones"] = me.getValue(mp.get(map_por_sub,"Total retenciones"))
+        if  c_y_g < menor or menor == 0:
+            diccio["Total retenciones"] = me.getValue(mp.get(map_por_sub,"retenciones"))
             diccio["ingresos netos"] = me.getValue(mp.get(map_por_sub,"ingresos netos"))
             diccio["costos y gastos"] = me.getValue(mp.get(map_por_sub,"costos y gastos"))
             diccio["saldo a pagar"] = me.getValue(mp.get(map_por_sub,"saldo a pagar"))
@@ -453,8 +453,8 @@ def req_3(data_structs,anio):
             diccio["nombre subsector"] =  actividad["Nombre subsector económico"]
             diccio["codigo subsector"] =  actividad["Código subsector económico"]
             
-            mayor = diccio["Total retenciones"]
-    
+            menor = diccio["Total retenciones"]
+    print(diccio)
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,cmp_req_3)
     dic_act = lt.newList("ARRAY_LIST")
