@@ -454,7 +454,7 @@ def req_3(data_structs,anio):
             diccio["codigo subsector"] =  actividad["Código subsector económico"]
             
             menor = diccio["Total retenciones"]
-    print(diccio)
+    
     lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
     merg.sort(lst,cmp_req_3)
     dic_act = lt.newList("ARRAY_LIST")
@@ -677,7 +677,6 @@ def req_7(data_structs,anio,subsector,top):
     
     lst_top = lt.newList(datastructure= "ARRAY_LIST",cmpfunction=None)
     sa.sort(lst,cmp_req7)
-    print(lt.size(lst))
     if lt.size(lst) < top:
         lst_top = lst
     else:
