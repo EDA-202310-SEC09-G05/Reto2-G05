@@ -714,6 +714,6 @@ def sort(lista,tipo):
     elif tipo=="cmp_6":
         criterio=cmp_req_6
         
-    lista = sa.sort(lista,criterio)
+    lista = merg.sort(lista,criterio)
     
 
