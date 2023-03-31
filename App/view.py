@@ -121,12 +121,22 @@ def print_req_2(control,anio,cod_sector):
     #Tiempo
     print("El tiempo que tomó ejecutar este requerimiento fue "+ f"{delta_time:.3f}" +" ms.")
 
-def print_req_3(control):
+def print_req_3(control,anio):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+
+    dic,time = controller.req_3(control,anio)
+    diccio,lista_act = dic
+    lista=lt.newList("ARRAY_LIST")
+    lt.addLast(lista, diccio)
+    
+    print("El tiempo es ",time)
+    print("el subsector economico con el menor total de retenciones en el año "+anio)
+    imprimir_tabla(lista,diccio.keys())
+
+    print("Las actividades  económicas que más y menos contribuyeron en el subsector "+str(diccio["codigo subsector"])+" son:")
+    imprimir_tabla(lista_act,["Código actividad económica","Nombre actividad económica","Retenciones","Total ingresos netos","Total costos y gastos","Total saldo a pagar","Total saldo a favor"])
 
 
 def print_req_4(control,anio):
@@ -328,7 +338,8 @@ if __name__ == "__main__":
                 print_req_2(control,anio_req2,cod_sector)
 
             elif int(inputs) == 4:
-                print_req_3(control)
+                anio_req3 = input("Ingrese el año del cual año desea conocer el subsector con el menor total de retenciones: ")
+                print_req_3(control,anio_req3)
 
             elif int(inputs) == 5:
                 anio = input("Ingrese el año del cual año desea conocer el subsector con mas gastos y costos nomina: ")
