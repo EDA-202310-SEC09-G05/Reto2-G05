@@ -145,12 +145,16 @@ def req_2(control,anio,cod_sector):
     return respuesta,delta_time
 
 
-def req_3(control):
+def req_3(control,anio):
     """
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    pass
+    start_time = getTime()
+    tupla = model.req_3(control["model"],anio)
+    stop_time = getTime()
+    delta_time = deltaTime(stop_time, start_time)
+    return tupla,delta_time
 
 
 def req_4(control,anio):

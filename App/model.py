@@ -312,7 +312,10 @@ def add(data_structs,data,tipo_mapa,factor_carga):
         
         #pareja llave valor retenciones  sub#
             
-        #TODO REQ-3
+        cyg_n = me.getValue(mp.get(map_sub_sector_cod,"retenciones"))
+        cyg_n += int(data["Total retenciones"])
+        entry_cyg_n = me.newMapEntry("retenciones",cyg_n)
+        mp.put(map_sub_sector_cod,me.getKey(entry_cyg_n),me.getValue(entry_cyg_n))
             
         #/pareja llave valor retenciones  sub#
         
@@ -421,13 +424,52 @@ def req_2(data_structs,anio,cod_sector):
     return lt.getElement(elements,1)
 
 
-def req_3(data_structs):
+def req_3(data_structs,anio):
     """
     Función que soluciona el requerimiento 3
     """
-    # TODO: Realizar el requerimiento 3
-    pass
+    
+    map_year = me.getValue(mp.get(data_structs["anios"],anio))
+    
+    map_sub_sector = me.getValue(mp.get(map_year,"sub_sector"))
+    menor = 0
+    diccio = {}
 
+    for sub in lt.iterator(mp.keySet(map_sub_sector)):
+        map_por_sub = me.getValue(mp.get(map_sub_sector,sub))
+
+        c_y_g = me.getValue(mp.get(map_por_sub,"Total retenciones"))
+        
+        if  c_y_g < menor:
+            diccio["Total retenciones"] = me.getValue(mp.get(map_por_sub,"Total retenciones"))
+            diccio["ingresos netos"] = me.getValue(mp.get(map_por_sub,"ingresos netos"))
+            diccio["costos y gastos"] = me.getValue(mp.get(map_por_sub,"costos y gastos"))
+            diccio["saldo a pagar"] = me.getValue(mp.get(map_por_sub,"saldo a pagar"))
+            diccio["saldo a favor"] = me.getValue( mp.get(map_por_sub,"saldo a favor"))
+            
+            actividad = lt.firstElement(me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,sub)),"elements")))
+            diccio["nombre sector"] =  actividad["Nombre sector económico"]
+            diccio["codigo sector"] =  actividad["Código sector económico"]
+            diccio["nombre subsector"] =  actividad["Nombre subsector económico"]
+            diccio["codigo subsector"] =  actividad["Código subsector económico"]
+            
+            mayor = diccio["Total retenciones"]
+    
+    lst = me.getValue(mp.get(me.getValue(mp.get(map_sub_sector,diccio["codigo subsector"])),"elements"))
+    merg.sort(lst,cmp_req_3)
+    dic_act = lt.newList("ARRAY_LIST")
+    if lt.size(lst)> 6:
+        for i in range(1,4):
+            lt.addLast(dic_act,lt.getElement(lst,i))
+
+        for x in range(lt.size(lst)-2,lt.size(lst)+1):
+            lt.addLast(dic_act,lt.getElement(lst,x))
+            
+    else:
+        dic_act = lst
+        
+    
+    return diccio,dic_act
 
 def req_4(data_structs,anio):
     """
@@ -676,6 +718,11 @@ def cmp_cod_actividad_economica(data1,data2):
 
 def cmp_req2(data1,data2):
     return int(data1["Total saldo a favor"]) > int(data2["Total saldo a favor"])
+def cmp_req_3(data_1,data_2):
+    if int(data_1["Total retenciones"]) < int(data_2["Total retenciones"]):
+        return True
+    else:
+        return False
 
 def cmp_req_4(data_1,data_2):
     if int(data_1["Costos y gastos nómina"]) > int(data_2["Costos y gastos nómina"]):
